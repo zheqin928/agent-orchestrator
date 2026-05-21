@@ -14,6 +14,43 @@ import { ThemeToggle } from "./ThemeToggle";
 import { AddProjectModal } from "./AddProjectModal";
 import { ProjectSettingsModal } from "./ProjectSettingsModal";
 
+function LogoutButton() {
+  const [busy, setBusy] = useState(false);
+  const handleLogout = async () => {
+    if (busy) return;
+    setBusy(true);
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } finally {
+      window.location.href = "/login";
+    }
+  };
+  return (
+    <button
+      type="button"
+      onClick={() => void handleLogout()}
+      disabled={busy}
+      className="project-sidebar__footer-btn"
+      title="退出登录"
+      aria-label="退出登录"
+    >
+      <svg
+        width="13"
+        height="13"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+        <path d="m16 17 5-5-5-5" />
+        <path d="M21 12H9" />
+      </svg>
+    </button>
+  );
+}
+
 /** Minimal shape needed to render an orchestrator link in the sidebar. */
 export interface ProjectSidebarOrchestrator {
   id: string;
@@ -1177,6 +1214,7 @@ function ProjectSidebarInner({
             ) : null}
           </div>
           <ThemeToggle className="project-sidebar__theme-toggle" />
+          <LogoutButton />
         </div>
       </div>
       <AddProjectModal open={addProjectOpen} onClose={() => setAddProjectOpen(false)} />

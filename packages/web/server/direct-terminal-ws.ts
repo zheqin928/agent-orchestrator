@@ -7,6 +7,12 @@ import { createServer, type Server } from "node:http";
 import type { WebSocketServer } from "ws";
 import { findTmux } from "./tmux-utils.js";
 import { createMuxWebSocket } from "./mux-websocket.js";
+import {
+  AUTH_COOKIE_NAME,
+  getAuthPassword,
+  parseCookieHeader,
+  verifySessionCookieValue,
+} from "./auth.js";
 
 export interface DirectTerminalServer {
   server: Server;
@@ -70,9 +76,21 @@ export function createDirectTerminalServer(tmuxPath?: string | null): DirectTerm
     const pathname = new URL(request.url ?? "/", "ws://localhost").pathname;
 
     if ((pathname === "/mux" || pathname === "/ao-terminal-mux") && muxWss) {
-      muxWss.handleUpgrade(request, socket, head, (ws) => {
-        muxWss!.emit("connection", ws, request);
-      });
+      void (async () => {
+        const password = getAuthPassword();
+        if (password) {
+          const cookies = parseCookieHeader(request.headers.cookie);
+          const ok = await verifySessionCookieValue(cookies[AUTH_COOKIE_NAME], password);
+          if (!ok) {
+            socket.write("HTTP/1.1 401 Unauthorized\r\n\r\n");
+            socket.destroy();
+            return;
+          }
+        }
+        muxWss!.handleUpgrade(request, socket, head, (ws) => {
+          muxWss!.emit("connection", ws, request);
+        });
+      })();
     } else {
       socket.destroy();
     }
