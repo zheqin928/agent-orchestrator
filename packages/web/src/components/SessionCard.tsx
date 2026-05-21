@@ -50,7 +50,7 @@ function getDoneStatusInfo(session: DashboardSession): {
 
   if (prState === "merged" || status === "merged") {
     return {
-      label: "merged",
+      label: "已合并",
       pillClass: "done-status-pill--merged",
       icon: (
         <svg
@@ -68,7 +68,7 @@ function getDoneStatusInfo(session: DashboardSession): {
 
   if (prState === "closed") {
     return {
-      label: "closed",
+      label: "已关闭",
       pillClass: "done-status-pill--exited",
       icon: (
         <svg
@@ -108,7 +108,7 @@ function getDoneStatusInfo(session: DashboardSession): {
   }
 
   // Default: exited / done / cleanup / closed PR
-  const label = activity === "exited" ? "exited" : getSessionTruthLabel(session);
+  const label = activity === "exited" ? "已退出" : getSessionTruthLabel(session);
   return {
     label,
     pillClass: "done-status-pill--exited",
@@ -233,9 +233,9 @@ function SessionCardView({
   const isDone = isDashboardSessionDone(session) || level === "done";
   const truthLine = session.lifecycle
     ? [
-        `Session ${getSessionTruthLabel(session)}`,
+        `会话 ${getSessionTruthLabel(session)}`,
         `PR ${getPRTruthLabel(session)}`,
-        `Runtime ${getRuntimeTruthLabel(session)}`,
+        `运行时 ${getRuntimeTruthLabel(session)}`,
       ].join(" · ")
     : null;
   const secondaryText = session.issueLabel
@@ -320,7 +320,7 @@ function SessionCardView({
                 <polyline points="1 4 1 10 7 10" />
                 <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
               </svg>
-              restore
+              恢复
             </button>
           )}
         </div>
@@ -379,7 +379,7 @@ function SessionCardView({
             onClick={(e) => e.stopPropagation()}
             className="done-meta-chip font-[var(--font-mono)] font-semibold text-[var(--color-accent)] no-underline hover:underline"
           >
-            View current context
+            查看当前上下文
           </a>
         </div>
 
@@ -392,7 +392,7 @@ function SessionCardView({
                   <svg fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path d="M4 6h16M4 12h16M4 18h10" />
                   </svg>
-                  Summary
+                  摘要
                 </div>
                 <p className="text-[12px] leading-relaxed text-[var(--color-text-secondary)]">
                   {session.summary}
@@ -407,7 +407,7 @@ function SessionCardView({
                     <circle cx="12" cy="12" r="10" />
                     <path d="M12 8v4M12 16h.01" />
                   </svg>
-                  Issue
+                  议题
                 </div>
                 <a
                   href={session.issueUrl}
@@ -429,7 +429,7 @@ function SessionCardView({
                     <path d="M9 12l2 2 4-4" />
                     <circle cx="12" cy="12" r="10" />
                   </svg>
-                  CI Checks
+                  CI 检查
                 </div>
                 <CICheckList checks={pr.ciChecks} />
               </div>
@@ -459,7 +459,7 @@ function SessionCardView({
                       <br />
                       <span className="mt-1 inline-flex items-center gap-2 text-[10px] text-[var(--color-text-muted)]">
                         <span className="inline-block h-3 w-12 animate-pulse rounded bg-[var(--color-bg-subtle)]" />
-                        <span>PR details loading...</span>
+                        <span>PR 详情加载中...</span>
                       </span>
                     </>
                   ) : (
@@ -472,11 +472,11 @@ function SessionCardView({
                         </span>
                         <span className="text-[var(--color-text-muted)]">·</span>
                         <span className="text-[10px] text-[var(--color-text-muted)]">
-                          mergeable: {pr.mergeability.mergeable ? "yes" : "no"}
+可合并: {pr.mergeability.mergeable ? "是" : "否"}
                         </span>
                         <span className="text-[var(--color-text-muted)]">·</span>
                         <span className="text-[10px] text-[var(--color-text-muted)]">
-                          review: {pr.reviewDecision}
+审阅: {pr.reviewDecision}
                         </span>
                       </span>
                     </>
@@ -487,7 +487,7 @@ function SessionCardView({
 
             {!pr && (
               <p className="text-[12px] text-[var(--color-text-tertiary)]">
-                No PR associated with this session.
+                此会话未关联 PR。
               </p>
             )}
 
@@ -551,7 +551,7 @@ function SessionCardView({
               <path d="M4 13a8 8 0 0 0 14.9 3.98" />
               <path d="M20 19v-4h-4" />
             </svg>
-            restore
+            恢复
           </button>
         )}
         {!isTerminal && (
@@ -575,7 +575,7 @@ function SessionCardView({
               <path d="M6 10l4 2-4 2" />
               <path d="M14 14h4" />
             </svg>
-            terminal
+            终端
           </a>
         )}
       </div>
@@ -663,7 +663,7 @@ function SessionCardView({
                 <circle cx="12" cy="12" r="10" />
                 <path d="M12 8v4M12 16h.01" />
               </svg>
-              PR data rate limited
+              PR 数据已限流
             </span>
           </div>
         )}
@@ -727,9 +727,9 @@ function SessionCardView({
                     {alert.label}
                   </a>
                   {alert.notified && (
-                    <span className="alert-row__notified" title="Agent has been notified">
+                    <span className="alert-row__notified" title="已通知智能体">
                       {" "}
-                      &middot; notified
+                      &middot; 已通知
                     </span>
                   )}
                 </span>
@@ -743,9 +743,9 @@ function SessionCardView({
                     className="alert-row__action"
                   >
                     {sendingAction === alert.key
-                      ? "sent!"
+                      ? "已发送!"
                       : failedAction === alert.key
-                        ? "failed"
+                        ? "失败"
                         : alert.actionLabel}
                   </button>
                 )}
@@ -778,7 +778,7 @@ function SessionCardView({
               onClick={(e) => e.stopPropagation()}
               className="card__view-context"
             >
-              View current context →
+              查看当前上下文 →
             </a>
             {!isTerminal && (
               <>
@@ -789,10 +789,10 @@ function SessionCardView({
                     disabled={sendingQuickReply !== null}
                   >
                     {sendingQuickReply === "continue"
-                      ? "Sending..."
+                      ? "发送中..."
                       : sentQuickReply === "continue"
-                        ? "Sent"
-                        : "Continue"}
+                        ? "已发送"
+                        : "继续"}
                   </button>
                   <button
                     className="card__preset"
@@ -800,10 +800,10 @@ function SessionCardView({
                     disabled={sendingQuickReply !== null}
                   >
                     {sendingQuickReply === "abort"
-                      ? "Sending..."
+                      ? "发送中..."
                       : sentQuickReply === "abort"
-                        ? "Sent"
-                        : "Abort"}
+                        ? "已发送"
+                        : "中止"}
                   </button>
                   <button
                     className="card__preset"
@@ -811,19 +811,19 @@ function SessionCardView({
                     disabled={sendingQuickReply !== null}
                   >
                     {sendingQuickReply === "skip"
-                      ? "Sending..."
+                      ? "发送中..."
                       : sentQuickReply === "skip"
-                        ? "Sent"
-                        : "Skip"}
+                        ? "已发送"
+                        : "跳过"}
                   </button>
                 </div>
                 <div className="card__reply-wrap">
                   <textarea
                     className="card__reply"
                     placeholder={
-                      sendingQuickReply !== null ? "Sending..." : "Type a reply... (Enter to send)"
+                      sendingQuickReply !== null ? "发送中..." : "输入回复... (回车发送)"
                     }
-                    aria-label="Type a reply to the agent"
+                    aria-label="向智能体输入回复"
                     value={replyText}
                     onChange={(e) => setReplyText(e.target.value)}
                     onKeyDown={(e) => {
@@ -855,7 +855,7 @@ function SessionCardView({
                   onClick={(e) => void handleReviewClick(e)}
                   disabled={requestingReview}
                   className="session-card__control session-card__review-control"
-                  aria-label="Request review"
+                  aria-label="请求审阅"
                 >
                   <svg
                     className="session-card__control-icon"
@@ -867,7 +867,7 @@ function SessionCardView({
                     <path d="M4 19.5V5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-1.5Z" />
                     <path d="M8 7h6M8 11h6M8 15h4" />
                   </svg>
-                  {requestingReview ? "Queued" : "Review"}
+                  {requestingReview ? "已排队" : "审阅"}
                 </button>
               ) : null}
               <button
@@ -889,7 +889,7 @@ function SessionCardView({
                   <circle cx="18" cy="6" r="2" />
                   <path d="M8 6h5a3 3 0 0 1 3 3v7" />
                 </svg>
-                Merge PR #{pr.number}
+合并 PR #{pr.number}
               </button>
             </div>
           ) : (
@@ -901,7 +901,7 @@ function SessionCardView({
                     onClick={(e) => void handleReviewClick(e)}
                     disabled={requestingReview}
                     className="session-card__control session-card__review-control"
-                    aria-label="Request review"
+                    aria-label="请求审阅"
                   >
                     <svg
                       className="session-card__control-icon"
@@ -913,14 +913,14 @@ function SessionCardView({
                       <path d="M4 19.5V5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-1.5Z" />
                       <path d="M8 7h6M8 11h6M8 15h4" />
                     </svg>
-                    {requestingReview ? "Queued" : "Review"}
+                    {requestingReview ? "已排队" : "审阅"}
                   </button>
                 ) : null}
                 <button
                   onClick={handleKillClick}
                   onMouseLeave={() => setKillConfirming(false)}
                   onBlur={() => setKillConfirming(false)}
-                  aria-label={killConfirming ? "Confirm terminate session" : "Terminate session"}
+                  aria-label={killConfirming ? "确认终止会话" : "终止会话"}
                   className={cn(
                     "session-card__control session-card__terminate btn--danger",
                     killConfirming && "is-confirming",
@@ -928,7 +928,7 @@ function SessionCardView({
                 >
                   {killConfirming ? (
                     <span className="font-mono text-[10px] font-semibold tracking-[0.04em]">
-                      kill?
+                      终止?
                     </span>
                   ) : (
                     <svg
@@ -971,11 +971,11 @@ function getFooterStatusLabel(
   level: ReturnType<typeof getAttentionLevel>,
   isReadyToMerge: boolean,
 ): string {
-  if (isReadyToMerge || level === "merge") return "mergeable";
-  if (session.lifecycle?.sessionState === "detecting") return "detecting";
+  if (isReadyToMerge || level === "merge") return "可合并";
+  if (session.lifecycle?.sessionState === "detecting") return "检测中";
   if (level === "respond") return getSessionTruthLabel(session);
   if (session.lifecycle?.prReason === "ci_failing" || session.status === "ci_failed")
-    return "ci failing";
+    return "CI 失败";
   if (level === "review") return getPRTruthLabel(session);
   if (level === "working") return getSessionTruthLabel(session);
   return getSessionTruthLabel(session);
@@ -1027,10 +1027,10 @@ function getAlerts(session: DashboardSession): Alert[] {
         key: "ci-fail",
         type: "ci",
         icon: "\u2717",
-        label: "CI failing",
+        label: "CI 失败",
         url: pr.url + "/checks",
         notified: Boolean(meta["lastCIFailureDispatchHash"]),
-        actionLabel: "Ask to fix",
+        actionLabel: "请求修复",
         actionMessage: `Please fix the failing CI checks on ${pr.url}`,
       });
     } else if (failCount === 0) {
@@ -1038,7 +1038,7 @@ function getAlerts(session: DashboardSession): Alert[] {
         key: "ci-unknown",
         type: "ci",
         icon: "?",
-        label: "CI unknown",
+        label: "CI 未知",
         url: pr.url + "/checks",
       });
     } else {
@@ -1047,10 +1047,10 @@ function getAlerts(session: DashboardSession): Alert[] {
         type: "ci",
         icon: "\u2717",
         count: failCount,
-        label: `check${failCount > 1 ? "s" : ""} failing`,
+        label: `项检查失败`,
         url: failedCheck?.url ?? pr.url + "/checks",
         notified: Boolean(meta["lastCIFailureDispatchHash"]),
-        actionLabel: "Ask to fix",
+        actionLabel: "请求修复",
         actionMessage: `Please fix the failing CI checks on ${pr.url}`,
       });
     }
@@ -1061,10 +1061,10 @@ function getAlerts(session: DashboardSession): Alert[] {
       key: "changes",
       type: "changes",
       icon: "\u21BB",
-      label: "changes requested",
+      label: "请求修改",
       url: pr.url,
       notified: Boolean(meta["lastPendingReviewDispatchHash"]),
-      actionLabel: "Ask to address",
+      actionLabel: "请求处理",
       actionMessage: `Please address the requested changes on ${pr.url}`,
     });
   } else if (!pr.isDraft && (pr.reviewDecision === "pending" || pr.reviewDecision === "none")) {
@@ -1086,9 +1086,9 @@ function getAlerts(session: DashboardSession): Alert[] {
           <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
         </svg>
       ),
-      label: "needs review",
+      label: "需要审阅",
       url: pr.url,
-      actionLabel: "Ask to post",
+      actionLabel: "请求发布",
       actionMessage: `Post ${pr.url} on slack asking for a review.`,
     });
   }
@@ -1098,10 +1098,10 @@ function getAlerts(session: DashboardSession): Alert[] {
       key: "conflict",
       type: "conflict",
       icon: "\u26A0",
-      label: "merge conflict",
+      label: "合并冲突",
       url: pr.url,
       notified: meta["lastMergeConflictDispatched"] === "true",
-      actionLabel: "Ask to fix",
+      actionLabel: "请求修复",
       actionMessage: `Please resolve the merge conflicts on ${pr.url} by rebasing on the base branch`,
     });
   }
@@ -1112,10 +1112,10 @@ function getAlerts(session: DashboardSession): Alert[] {
       key: "comments",
       type: "comment",
       icon: "\uD83D\uDCAC",
-      label: "unresolved comments",
+      label: "未解决的评论",
       count: pr.unresolvedThreads,
       url: firstUrl,
-      actionLabel: "Ask to resolve",
+      actionLabel: "请求处理",
       actionMessage: `Please address all unresolved review comments on ${pr.url}`,
     });
   }

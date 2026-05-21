@@ -1171,7 +1171,7 @@ function ProjectSidebarInner({
                     checked={showSessionId}
                     onChange={(e) => setShowSessionId(e.target.checked)}
                   />
-                  <span>Show session ID</span>
+                  <span>显示会话 ID</span>
                 </label>
               </div>
             ) : null}

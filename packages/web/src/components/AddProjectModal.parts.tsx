@@ -25,9 +25,9 @@ export function getParentBrowsePath(currentPath: string): string | null {
 }
 
 export function getBreadcrumbs(currentPath: string): Array<{ label: string; path: string }> {
-  if (currentPath === "~") return [{ label: "home", path: "~" }];
+  if (currentPath === "~") return [{ label: "主目录", path: "~" }];
   const parts = currentPath.split("/").filter(Boolean);
-  const crumbs: Array<{ label: string; path: string }> = [{ label: "home", path: "~" }];
+  const crumbs: Array<{ label: string; path: string }> = [{ label: "主目录", path: "~" }];
   let running = "~";
   for (const part of parts.slice(1)) {
     running = running === "~" ? `~/${part}` : `${running}/${part}`;

@@ -19,17 +19,17 @@ export default function Error({
 
   return (
     <ErrorDisplay
-      title="Something went wrong"
-      message="The dashboard hit an unexpected error. Try reloading the route data or head back to the main dashboard."
+      title="出错了"
+      message="仪表盘遇到了意外错误。请尝试重新加载路由数据，或返回主仪表盘。"
       tone="warning"
       primaryAction={{
-        label: "Try again",
+        label: "重试",
         onClick: () => {
           reset();
           router.refresh();
         },
       }}
-      secondaryAction={{ label: "Back to dashboard", href: "/" }}
+      secondaryAction={{ label: "返回仪表盘", href: "/" }}
       error={error}
       compact
       chrome="card"

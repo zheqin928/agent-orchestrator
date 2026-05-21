@@ -92,10 +92,6 @@ function formatFindingLocation(finding: CodeReviewFinding): string | null {
   return `${finding.filePath}:${finding.startLine}`;
 }
 
-function pluralize(count: number, singular: string, plural = `${singular}s`): string {
-  return `${count} ${count === 1 ? singular : plural}`;
-}
-
 function canSendFeedbackToWorker(run: DashboardReviewRun): boolean {
   if (!run.workerHasRuntime) return false;
   if (run.workerActivity === "exited") return false;

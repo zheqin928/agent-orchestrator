@@ -18,11 +18,11 @@ export default function GlobalError({
     <html lang="en" className="dark">
       <body className="bg-[var(--color-bg-base)] text-[var(--color-text-primary)] antialiased">
         <ErrorDisplay
-          title="Something broke at the app shell"
-          message="The dashboard could not recover from this error at the layout level. Try again first, then reload the page if it still fails."
+          title="应用外壳出错"
+          message="仪表盘无法在布局层级从此错误中恢复。请先尝试重试，如果仍然失败请重新加载页面。"
           tone="error"
-          primaryAction={{ label: "Try again", onClick: reset }}
-          secondaryAction={{ label: "Reload page", onClick: () => window.location.reload() }}
+          primaryAction={{ label: "重试", onClick: reset }}
+          secondaryAction={{ label: "重新加载页面", onClick: () => window.location.reload() }}
           error={error}
         />
       </body>

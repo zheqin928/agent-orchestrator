@@ -110,7 +110,7 @@ export function SessionDetail({
 
   const handleRelaunchClean = useCallback(async () => {
     const confirmed = window.confirm(
-      "This will discard the current orchestrator's conversation and state. Continue?",
+      "这将丢弃当前编排器的对话和状态。是否继续?",
     );
     if (!confirmed) return;
     setRelaunchError(null);
@@ -143,7 +143,7 @@ export function SessionDetail({
       const newId = data.orchestrator?.id ?? session.id;
       window.location.href = projectSessionPath(session.projectId, newId);
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to relaunch orchestrator";
+      const message = err instanceof Error ? err.message : "重新启动编排器失败";
       console.error("Failed to relaunch orchestrator:", err);
       setRelaunchError(message);
     }
@@ -190,17 +190,16 @@ export function SessionDetail({
           >
             <div className="flex items-start justify-between gap-3">
               <div>
-                <span className="font-semibold">Relaunch failed:</span> {relaunchError}
+                <span className="font-semibold">重新启动失败:</span> {relaunchError}
                 <div className="mt-1 text-[var(--color-text-secondary)]">
-                  The previous orchestrator may already be terminated. Try again from the
-                  project dashboard.
+                  之前的编排器可能已被终止。请从项目仪表板重试。
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setRelaunchError(null)}
                 className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
-                aria-label="Dismiss"
+                aria-label="关闭"
               >
                 ×
               </button>
@@ -236,7 +235,7 @@ export function SessionDetail({
         </div>
       </main>
       <MobileBottomNav
-        ariaLabel="Session navigation"
+        ariaLabel="会话导航"
         activeTab={isOrchestrator ? "orchestrator" : undefined}
         dashboardHref={dashboardHref}
         prsHref={

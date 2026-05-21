@@ -64,7 +64,7 @@ export function AddProjectModal({ open, onClose }: AddProjectModalProps) {
       if (!response) {
         setBrowseEntries([]);
         setSelectedBrowsePath(options?.selectedPath ?? path);
-        setBrowseError("Failed to browse directories.");
+        setBrowseError("浏览目录失败。");
         return;
       }
 
@@ -74,7 +74,7 @@ export function AddProjectModal({ open, onClose }: AddProjectModalProps) {
           | null;
         setBrowseEntries([]);
         setSelectedBrowsePath(options?.selectedPath ?? path);
-        setBrowseError(body?.error ?? "Failed to browse directories.");
+        setBrowseError(body?.error ?? "浏览目录失败。");
         return;
       }
 
@@ -101,7 +101,7 @@ export function AddProjectModal({ open, onClose }: AddProjectModalProps) {
         });
       }
     } catch {
-      setBrowseError("Failed to browse directories.");
+      setBrowseError("浏览目录失败。");
     } finally {
       setBrowseLoading(false);
     }
@@ -224,7 +224,7 @@ export function AddProjectModal({ open, onClose }: AddProjectModalProps) {
         | null;
       if (response.status === 409 && body?.existingProjectId && body?.suggestedProjectId && body?.suggestion) {
         setCollision({
-          error: body.error ?? "A project with that ID already exists.",
+          error: body.error ?? "已存在使用该 ID 的项目。",
           existingProjectId: body.existingProjectId,
           suggestedProjectId: body.suggestedProjectId,
           suggestion: body.suggestion,
@@ -233,7 +233,7 @@ export function AddProjectModal({ open, onClose }: AddProjectModalProps) {
         return;
       }
       if (!response.ok) {
-        const message = body?.error ?? "Failed to add project.";
+        const message = body?.error ?? "添加项目失败。";
         if (response.status < 500) setInlineError(message);
         else setNetworkError(message);
         return;
@@ -244,7 +244,7 @@ export function AddProjectModal({ open, onClose }: AddProjectModalProps) {
       router.push(`/projects/${encodeURIComponent(nextProjectId)}`);
       router.refresh();
     } catch {
-      setNetworkError("Network error while adding project.");
+      setNetworkError("添加项目时发生网络错误。");
     } finally {
       setSubmitting(false);
     }
@@ -261,19 +261,19 @@ export function AddProjectModal({ open, onClose }: AddProjectModalProps) {
   const selectedNotice = collision ? (
     <div className="add-project-modal__notice add-project-modal__notice--warning">
       <p className="add-project-modal__notice-title">{collision.error}</p>
-      <p className="add-project-modal__notice-copy">Existing project: <code>{collision.existingProjectId}</code></p>
-      <p className="add-project-modal__notice-copy">Suggested project ID: <code>{collision.suggestedProjectId}</code></p>
+      <p className="add-project-modal__notice-copy">现有项目: <code>{collision.existingProjectId}</code></p>
+      <p className="add-project-modal__notice-copy">建议的项目 ID: <code>{collision.suggestedProjectId}</code></p>
       <div className="add-project-modal__notice-actions">
-        <button type="button" onClick={() => { onClose(); router.push(`/projects/${encodeURIComponent(collision.existingProjectId)}`); }} className="add-project-modal__ghostbtn">Open existing</button>
-        <button type="button" onClick={() => void submit(true)} className="add-project-modal__ghostbtn">Use suggested ID</button>
-        <span className="add-project-modal__notice-hint">Edit the Project ID field or accept the suggested suffix.</span>
+        <button type="button" onClick={() => { onClose(); router.push(`/projects/${encodeURIComponent(collision.existingProjectId)}`); }} className="add-project-modal__ghostbtn">打开现有项目</button>
+        <button type="button" onClick={() => void submit(true)} className="add-project-modal__ghostbtn">使用建议的 ID</button>
+        <span className="add-project-modal__notice-hint">编辑项目 ID 字段或接受建议的后缀。</span>
       </div>
     </div>
   ) : inlineError ? (
     <div role="alert" className="add-project-modal__notice add-project-modal__notice--error">{inlineError}</div>
   ) : selectedEntry && !selectedEntry.isGitRepo ? (
     <div role="alert" className="add-project-modal__notice add-project-modal__notice--error">
-      Selected folder is not a git repository.
+      所选文件夹不是 git 仓库。
     </div>
   ) : networkError ? (
     <div className="add-project-modal__notice add-project-modal__notice--error">{networkError}</div>
@@ -281,17 +281,17 @@ export function AddProjectModal({ open, onClose }: AddProjectModalProps) {
 
   return (
     <div className="add-project-modal-backdrop">
-      <div ref={modalRef} role="dialog" aria-modal="true" aria-label="Add project" className="add-project-modal" tabIndex={-1}>
+      <div ref={modalRef} role="dialog" aria-modal="true" aria-label="添加项目" className="add-project-modal" tabIndex={-1}>
         <div className="add-project-modal__titlebar">
-          <h2 className="add-project-modal__windowtitle">add project</h2>
-          <button type="button" aria-label="Close" onClick={onClose} className="add-project-modal__iconbtn">×</button>
+          <h2 className="add-project-modal__windowtitle">添加项目</h2>
+          <button type="button" aria-label="关闭" onClick={onClose} className="add-project-modal__iconbtn">×</button>
         </div>
         <div className="add-project-modal__toolbar">
           <div className="add-project-modal__toolbarcluster">
-            <button type="button" onClick={() => navigateHistory(browseHistoryIndex - 1)} disabled={!canGoBack} className="add-project-modal__toolbtn" aria-label="Go back"><ChevronLeftIcon /></button>
-            <button type="button" onClick={() => navigateHistory(browseHistoryIndex + 1)} disabled={!canGoForward} className="add-project-modal__toolbtn" aria-label="Go forward"><ChevronRightIcon /></button>
-            <button type="button" onClick={() => parentPath && void browse(parentPath)} disabled={!parentPath} className="add-project-modal__toolbtn" aria-label="Go up"><ArrowUpIcon /></button>
-            <button type="button" onClick={() => void browse(browsePath, { mode: "replace", selectedPath: selectedBrowsePath })} className="add-project-modal__toolbtn" aria-label="Refresh"><RefreshIcon /></button>
+            <button type="button" onClick={() => navigateHistory(browseHistoryIndex - 1)} disabled={!canGoBack} className="add-project-modal__toolbtn" aria-label="后退"><ChevronLeftIcon /></button>
+            <button type="button" onClick={() => navigateHistory(browseHistoryIndex + 1)} disabled={!canGoForward} className="add-project-modal__toolbtn" aria-label="前进"><ChevronRightIcon /></button>
+            <button type="button" onClick={() => parentPath && void browse(parentPath)} disabled={!parentPath} className="add-project-modal__toolbtn" aria-label="上一级"><ArrowUpIcon /></button>
+            <button type="button" onClick={() => void browse(browsePath, { mode: "replace", selectedPath: selectedBrowsePath })} className="add-project-modal__toolbtn" aria-label="刷新"><RefreshIcon /></button>
           </div>
           <div className="add-project-modal__location">{browsePath}</div>
         </div>
@@ -299,23 +299,23 @@ export function AddProjectModal({ open, onClose }: AddProjectModalProps) {
         <div className="add-project-modal__content">
           <div className="add-project-browser">
             <div className="add-project-browser__current">
-              <div className="add-project-browser__current-label">Current folder</div>
+              <div className="add-project-browser__current-label">当前文件夹</div>
               <div className="add-project-browser__current-path">{browsePath}</div>
             </div>
             {browseError ? (
               <div className="add-project-browser__state add-project-browser__state--error">
-                <p className="add-project-browser__state-title">Directory browser unavailable</p>
+                <p className="add-project-browser__state-title">目录浏览不可用</p>
                 <p className="add-project-browser__state-copy">{browseError}</p>
               </div>
             ) : browseLoading ? (
               <div className="add-project-browser__state">
-                <p className="add-project-browser__state-title">Loading folders</p>
-                <p className="add-project-browser__state-copy">Fetching directories for this location.</p>
+                <p className="add-project-browser__state-title">加载文件夹中</p>
+                <p className="add-project-browser__state-copy">正在获取此位置的目录。</p>
               </div>
             ) : directoryEntries.length === 0 ? (
               <div className="add-project-browser__state">
-                <p className="add-project-browser__state-title">No visible folders here</p>
-                <p className="add-project-browser__state-copy">Try navigating up or picking a different location.</p>
+                <p className="add-project-browser__state-title">此处无可见文件夹</p>
+                <p className="add-project-browser__state-copy">请尝试向上导航或选择其他位置。</p>
               </div>
             ) : (
               <div className="add-project-browser__rows">
@@ -338,11 +338,11 @@ export function AddProjectModal({ open, onClose }: AddProjectModalProps) {
         </div>
 
         <div className="add-project-modal__pathbar add-project-modal__pathbar--selection">
-          <span className="add-project-modal__selection-label">Selected</span>
-          <span className="add-project-modal__selection-path">{selectedBrowsePath || "No directory selected"}</span>
+          <span className="add-project-modal__selection-label">已选择</span>
+          <span className="add-project-modal__selection-path">{selectedBrowsePath || "未选择目录"}</span>
         </div>
         <div className="add-project-modal__pathbar add-project-modal__pathbar--selection">
-          <label className="add-project-modal__selection-label" htmlFor="project-id-input">Project ID</label>
+          <label className="add-project-modal__selection-label" htmlFor="project-id-input">项目 ID</label>
           <input
             id="project-id-input"
             value={projectIdInput}
@@ -351,7 +351,7 @@ export function AddProjectModal({ open, onClose }: AddProjectModalProps) {
           />
         </div>
         <div className="add-project-modal__pathbar add-project-modal__pathbar--selection">
-          <label className="add-project-modal__selection-label" htmlFor="project-name-input">Project name</label>
+          <label className="add-project-modal__selection-label" htmlFor="project-name-input">项目名称</label>
           <input
             id="project-name-input"
             value={projectNameInput}
@@ -362,10 +362,10 @@ export function AddProjectModal({ open, onClose }: AddProjectModalProps) {
         {selectedNotice}
 
         <div className="add-project-modal__footer">
-          <div className="add-project-modal__foldercount">{directoryEntries.length} folders</div>
+          <div className="add-project-modal__foldercount">{directoryEntries.length} 个文件夹</div>
           <div className="add-project-modal__actions">
-            <button type="button" onClick={onClose} className="add-project-modal__ghostbtn">Cancel</button>
-            <button type="button" onClick={() => void submit()} disabled={!canSubmit || submitting} className="add-project-modal__primarybtn">{submitting ? "Adding…" : "Add project"}</button>
+            <button type="button" onClick={onClose} className="add-project-modal__ghostbtn">取消</button>
+            <button type="button" onClick={() => void submit()} disabled={!canSubmit || submitting} className="add-project-modal__primarybtn">{submitting ? "添加中…" : "添加项目"}</button>
           </div>
         </div>
       </div>

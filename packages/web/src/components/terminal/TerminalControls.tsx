@@ -47,14 +47,14 @@ export function TerminalControls({
           method: "POST",
         });
         if (!remapRes.ok) {
-          throw new Error(`Failed to remap OpenCode session: ${remapRes.status}`);
+          throw new Error(`重新映射 OpenCode 会话失败：${remapRes.status}`);
         }
         const remapData = (await remapRes.json()) as { opencodeSessionId?: unknown };
         if (
           typeof remapData.opencodeSessionId !== "string" ||
           remapData.opencodeSessionId.length === 0
         ) {
-          throw new Error("Missing OpenCode session id after remap");
+          throw new Error("重新映射后缺少 OpenCode 会话 ID");
         }
         commandToSend = `/exit\nopencode --session ${remapData.opencodeSessionId}\n`;
       }
@@ -65,7 +65,7 @@ export function TerminalControls({
         body: JSON.stringify({ message: commandToSend }),
       });
       if (!sendRes.ok) {
-        throw new Error(`Failed to send reload command: ${sendRes.status}`);
+        throw new Error(`发送重新加载命令失败：${sendRes.status}`);
       }
     } catch (err) {
       setReloadError(err instanceof Error ? err.message : "重新加载 OpenCode 会话失败");

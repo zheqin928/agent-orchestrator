@@ -121,17 +121,17 @@ export function getSessionTitle(session: DashboardSession): string {
 export function formatRelativeTime(input: number): string {
   const elapsedMs = Date.now() - input;
 
-  if (elapsedMs < 60_000) return "just now";
+  if (elapsedMs < 60_000) return "刚刚";
 
   const minutes = Math.floor(elapsedMs / 60_000);
-  if (minutes < 60) return `${minutes}m ago`;
+  if (minutes < 60) return `${minutes} 分钟前`;
 
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
+  if (hours < 24) return `${hours} 小时前`;
 
   const days = Math.floor(hours / 24);
-  if (days < 7) return `${days}d ago`;
+  if (days < 7) return `${days} 天前`;
 
   const weeks = Math.floor(days / 7);
-  return `${weeks}w ago`;
+  return `${weeks} 周前`;
 }
