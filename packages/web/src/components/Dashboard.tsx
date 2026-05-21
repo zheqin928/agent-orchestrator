@@ -30,6 +30,11 @@ import { ProjectSidebar } from "./ProjectSidebar";
 import { isOrchestratorSession } from "@aoagents/ao-core/types";
 import { projectDashboardPath, projectReviewPath, projectSessionPath } from "@/lib/routes";
 import { BottomSheet } from "./BottomSheet";
+import { MobileBottomNav } from "./MobileBottomNav";
+
+function projectPRsPath(projectId: string | undefined): string {
+  return projectId ? `/prs?project=${encodeURIComponent(projectId)}` : "/prs?project=all";
+}
 
 interface DashboardProps {
   initialSessions: DashboardSession[];
@@ -877,6 +882,16 @@ function DashboardInner({
         <ConnectionBar status={connectionStatus} />
         {mainPanel}
         {bottomSheet}
+        {isMobile ? (
+          <MobileBottomNav
+            ariaLabel="主导航"
+            activeTab="dashboard"
+            dashboardHref={codingHref}
+            prsHref={projectPRsPath(projectId)}
+            showOrchestrator={!allProjectsView}
+            orchestratorHref={orchestratorHref}
+          />
+        ) : null}
       </>
     );
   }
@@ -914,6 +929,16 @@ function DashboardInner({
         </div>
       </div>
       {bottomSheet}
+      {isMobile ? (
+        <MobileBottomNav
+          ariaLabel="主导航"
+          activeTab="dashboard"
+          dashboardHref={codingHref}
+          prsHref={projectPRsPath(projectId)}
+          showOrchestrator={!allProjectsView}
+          orchestratorHref={orchestratorHref}
+        />
+      ) : null}
     </SidebarContext.Provider>
   );
 }
