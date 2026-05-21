@@ -48,22 +48,22 @@ const DETAILED_KANBAN_LEVELS = ["working", "pending", "review", "respond", "merg
 const EMPTY_ORCHESTRATORS: DashboardOrchestratorLink[] = [];
 
 function formatRelativeTimeCompact(isoDate: string | null): string {
-  if (!isoDate) return "just now";
+  if (!isoDate) return "刚刚";
   const timestamp = new Date(isoDate).getTime();
-  if (!Number.isFinite(timestamp)) return "just now";
+  if (!Number.isFinite(timestamp)) return "刚刚";
 
   const diffMs = Date.now() - timestamp;
-  if (diffMs <= 0) return "just now";
+  if (diffMs <= 0) return "刚刚";
 
   const diffSecs = Math.floor(diffMs / 1000);
   const diffMins = Math.floor(diffSecs / 60);
   const diffHours = Math.floor(diffMins / 60);
   const diffDays = Math.floor(diffHours / 24);
 
-  if (diffSecs < 60) return `${diffSecs}s ago`;
-  if (diffMins < 60) return `${diffMins}m ago`;
-  if (diffHours < 24) return `${diffHours}h ago`;
-  return `${diffDays}d ago`;
+  if (diffSecs < 60) return `${diffSecs}秒前`;
+  if (diffMins < 60) return `${diffMins}分钟前`;
+  if (diffHours < 24) return `${diffHours}小时前`;
+  return `${diffDays}天前`;
 }
 
 function mergeOrchestrators(
@@ -94,7 +94,7 @@ function DoneCard({
   const isMerged = session.pr?.state === "merged" || session.status === "merged";
   const isTerminated = isDashboardSessionTerminated(session);
   const canRestore = isDashboardSessionRestorable(session);
-  const badgeLabel = isMerged ? "merged" : isTerminated ? "terminated" : "done";
+  const badgeLabel = isMerged ? "已合并" : isTerminated ? "已终止" : "已完成";
   const badgeClass = `done-card__badge ${isTerminated ? "done-card__badge--terminated" : "done-card__badge--merged"}`;
 
   return (
@@ -135,7 +135,7 @@ function DoneCard({
               onRestore(session.id);
             }}
           >
-            Restore
+            恢复
           </button>
         ) : null}
       </div>
@@ -281,7 +281,7 @@ function DashboardInner({
   useEffect(() => {
     const needsAttention = countNeedingAttention(attentionLevels);
     const label = projectName ?? "ao";
-    document.title = needsAttention > 0 ? `${label} (${needsAttention} need attention)` : label;
+    document.title = needsAttention > 0 ? `${label} (${needsAttention} 项待处理)` : label;
   }, [attentionLevels, projectName]);
 
   const grouped = useMemo(() => {
@@ -355,7 +355,7 @@ function DashboardInner({
           const text = await res.text();
           const messageText = text || "Unknown error";
           console.error(`Failed to send message to ${sessionId}:`, messageText);
-          showToast(`Send failed: ${messageText}`, "error");
+          showToast(`发送失败：${messageText}`, "error");
           const errorWithToast = new Error(messageText);
           (errorWithToast as Error & { toastShown?: boolean }).toastShown = true;
           throw errorWithToast;
@@ -367,7 +367,7 @@ function DashboardInner({
           (error as Error & { toastShown?: boolean }).toastShown;
         if (!toastShown) {
           console.error(`Network error sending message to ${sessionId}:`, error);
-          showToast("Network error while sending message", "error");
+          showToast("发送消息时网络错误", "error");
         }
         throw error;
       }
@@ -384,13 +384,13 @@ function DashboardInner({
         if (!res.ok) {
           const text = await res.text();
           console.error(`Failed to kill ${sessionId}:`, text);
-          showToast(`Terminate failed: ${text}`, "error");
+          showToast(`终止失败：${text}`, "error");
         } else {
-          showToast("Session terminated", "success");
+          showToast("会话已终止", "success");
         }
       } catch (error) {
         console.error(`Network error killing ${sessionId}:`, error);
-        showToast("Network error while terminating session", "error");
+        showToast("终止会话时网络错误", "error");
       }
     },
     [showToast],
@@ -431,14 +431,14 @@ function DashboardInner({
         if (!res.ok) {
           const text = await res.text();
           console.error(`Failed to merge PR #${prNumber}:`, text);
-          showToast(`Merge failed: ${text}`, "error");
+          showToast(`合并失败：${text}`, "error");
           return;
         } else {
-          showToast(`PR #${prNumber} merged`, "success");
+          showToast(`PR #${prNumber} 已合并`, "success");
         }
       } catch (error) {
         console.error(`Network error merging PR #${prNumber}:`, error);
-        showToast("Network error while merging PR", "error");
+        showToast("合并 PR 时网络错误", "error");
       }
     },
     [showToast],
@@ -453,14 +453,14 @@ function DashboardInner({
         if (!res.ok) {
           const text = await res.text();
           console.error(`Failed to restore ${sessionId}:`, text);
-          showToast(`Restore failed: ${text}`, "error");
+          showToast(`恢复失败：${text}`, "error");
         } else {
-          showToast("Session restored", "success");
+          showToast("会话已恢复", "success");
           routerRef.current.refresh();
         }
       } catch (error) {
         console.error(`Network error restoring ${sessionId}:`, error);
-        showToast("Network error while restoring session", "error");
+        showToast("恢复会话时网络错误", "error");
       }
     },
     [showToast],
@@ -480,12 +480,12 @@ function DashboardInner({
         }
 
         const session = sessionsRef.current.find((entry) => entry.id === sessionId);
-        showToast("Review run requested", "success");
+        showToast("已请求审阅运行", "success");
         routerRef.current.push(projectReviewPath(session?.projectId ?? projectId));
       } catch (error) {
         const message = error instanceof Error ? error.message : "Failed to request review";
         console.error(`Failed to request review for ${sessionId}:`, error);
-        showToast(`Review failed: ${message}`, "error");
+        showToast(`审阅失败：${message}`, "error");
         throw error;
       }
     },
@@ -540,12 +540,11 @@ function DashboardInner({
       aria-live="assertive"
     >
       <span className="font-semibold text-[var(--color-status-error)]">
-        Orchestrator failed to load
+        编排器加载失败
       </span>
       <span className="break-words text-[var(--color-text-secondary)]">{visibleLoadError}</span>
       <span className="text-[var(--color-text-secondary)]">
-        Confirm <span className="font-mono text-[10px]">agent-orchestrator.yaml</span> exists and is
-        valid, then run <span className="font-mono text-[10px]">ao doctor</span> for diagnostics.
+        请确认 <span className="font-mono text-[10px]">agent-orchestrator.yaml</span> 存在且有效，然后运行 <span className="font-mono text-[10px]">ao doctor</span> 获取诊断信息。
       </span>
     </div>
   ) : null;
@@ -557,8 +556,8 @@ function DashboardInner({
   const normalizedProjectName = projectName?.trim().toLowerCase();
   const headerProjectLabel =
     normalizedProjectName === "agent orchestrator"
-      ? (projectId ?? projectName ?? (allProjectsView ? "All projects" : "Dashboard"))
-      : (projectName ?? (allProjectsView ? "All projects" : "Dashboard"));
+      ? (projectId ?? projectName ?? (allProjectsView ? "所有项目" : "仪表盘"))
+      : (projectName ?? (allProjectsView ? "所有项目" : "仪表盘"));
   const showHeaderProjectLabel = !allProjectsView && headerProjectLabel.trim().length > 0;
 
   const handleZoneToggle = (level: AttentionLevel) => {
@@ -580,7 +579,7 @@ function DashboardInner({
             type="button"
             className="dashboard-app-sidebar-toggle"
             onClick={handleToggleSidebar}
-            aria-label="Toggle sidebar"
+            aria-label="切换侧边栏"
           >
             {isMobile ? (
               <svg
@@ -618,16 +617,16 @@ function DashboardInner({
               <div className="topbar-project-pills-group">
                 <div className="topbar-project-line">
                   <span className="dashboard-app-header__project">{headerProjectLabel}</span>
-                  <nav className="workspace-mode-switch" aria-label="Workspace mode">
+                  <nav className="workspace-mode-switch" aria-label="工作区模式">
                     <Link
                       href={codingHref}
                       className="workspace-mode-switch__item workspace-mode-switch__item--active"
                       aria-current="page"
                     >
-                      Coding
+                      编码
                     </Link>
                     <Link href={reviewHref} className="workspace-mode-switch__item">
-                      Reviews
+                      代码审阅
                     </Link>
                   </nav>
                 </div>
@@ -637,7 +636,7 @@ function DashboardInner({
                       <div className="topbar-status-pill topbar-status-pill--active">
                         <span className="topbar-status-pill__dot topbar-status-pill__dot--working" />
                         <span className="topbar-status-pill__label">
-                          {grouped.working.length} working
+                          {grouped.working.length} 进行中
                         </span>
                       </div>
                     ) : null}
@@ -653,7 +652,7 @@ function DashboardInner({
                             grouped.action.length +
                             grouped.respond.length +
                             grouped.review.length}{" "}
-                          need attention
+                          需要处理
                         </span>
                       </div>
                     ) : null}
@@ -670,7 +669,7 @@ function DashboardInner({
               <Link
                 href={orchestratorHref}
                 className="dashboard-app-btn dashboard-app-btn--amber"
-                aria-label="Orchestrator"
+                aria-label="编排器"
               >
                 <svg
                   width="12"
@@ -687,13 +686,13 @@ function DashboardInner({
                   <circle cx="12" cy="17" r="2" />
                   <circle cx="18" cy="17" r="2" />
                 </svg>
-                Orchestrator
+                编排器
               </Link>
             ) : canSpawnProjectOrchestrator && activeProject ? (
               <button
                 type="button"
                 className="dashboard-app-btn dashboard-app-btn--amber"
-                aria-label="Spawn Orchestrator"
+                aria-label="启动编排器"
                 onClick={() => void handleSpawnOrchestrator(activeProject)}
                 disabled={isSpawningCurrentProject}
               >
@@ -712,7 +711,7 @@ function DashboardInner({
                   <circle cx="12" cy="17" r="2" />
                   <circle cx="18" cy="17" r="2" />
                 </svg>
-                {isSpawningCurrentProject ? "Spawning..." : "Spawn Orchestrator"}
+                {isSpawningCurrentProject ? "启动中..." : "启动编排器"}
               </button>
             ) : null}
           </div>
@@ -721,9 +720,9 @@ function DashboardInner({
         <main className="dashboard-main flex flex-col flex-1 min-h-0 overflow-hidden">
           <DynamicFavicon attentionLevels={attentionLevels} projectName={projectName} />
           <div className="dashboard-main__subhead">
-            <h1 className="dashboard-main__title">Dashboard</h1>
+            <h1 className="dashboard-main__title">仪表盘</h1>
             <p className="dashboard-main__subtitle">
-              Live agent sessions, pull requests, and merge status.
+              实时智能体会话、拉取请求与合并状态。
             </p>
           </div>
 
@@ -742,13 +741,12 @@ function DashboardInner({
                   <path d="M12 8v4M12 16h.01" />
                 </svg>
                 <span className="flex-1">
-                  GitHub API rate limited — PR data (CI status, review state, sizes) may be stale.
-                  Will retry automatically on next refresh.
+                  GitHub API 已限流——PR 数据（CI 状态、审阅状态、规模）可能已过时。将在下次刷新时自动重试。
                 </span>
                 <button
                   onClick={() => setRateLimitDismissed(true)}
                   className="ml-1 shrink-0 opacity-60 hover:opacity-100"
-                  aria-label="Dismiss"
+                  aria-label="关闭"
                 >
                   <svg
                     className="h-3.5 w-3.5"
@@ -814,7 +812,7 @@ function DashboardInner({
                       }
                     : null
                 }
-                spawnLabel={isSpawningCurrentProject ? "Spawning..." : "Spawn Orchestrator"}
+                spawnLabel={isSpawningCurrentProject ? "启动中..." : "启动编排器"}
                 spawnDisabled={isSpawningCurrentProject}
               />
             ) : null}
@@ -843,7 +841,7 @@ function DashboardInner({
                   >
                     <path d="m9 18 6-6-6-6" />
                   </svg>
-                  <span className="done-bar__label">Done / Terminated</span>
+                  <span className="done-bar__label">已完成 / 已终止</span>
                   <span className="done-bar__count">{grouped.done.length}</span>
                 </button>
                 {doneExpanded && (
@@ -966,12 +964,12 @@ function ProjectOverviewGrid({
                   </h2>
                   <div className="mt-1 text-[11px] text-[var(--color-text-muted)]">
                     {isDegraded ? (
-                      "Config needs repair"
+                      "配置需要修复"
                     ) : (
                       <>
-                        {sessionCount} active session{sessionCount !== 1 ? "s" : ""}
+                        {sessionCount} 个活跃会话
                         {openPRCount > 0
-                          ? ` · ${openPRCount} open PR${openPRCount !== 1 ? "s" : ""}`
+                          ? ` · ${openPRCount} 个开放 PR`
                           : ""}
                       </>
                     )}
@@ -981,39 +979,39 @@ function ProjectOverviewGrid({
                   href={projectHref}
                   className="border border-[var(--color-border-default)] px-3 py-1.5 text-[11px] font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-hover)] hover:no-underline"
                 >
-                  Open project
+                  打开项目
                 </Link>
               </div>
 
               <div className="mb-4 flex flex-wrap gap-2">
-                <ProjectMetric label="Merge" value={counts.merge} tone="ready" />
+                <ProjectMetric label="待合并" value={counts.merge} tone="ready" />
                 {attentionZones === "detailed" ? (
                   <>
-                    <ProjectMetric label="Respond" value={counts.respond} tone="error" />
-                    <ProjectMetric label="Review" value={counts.review} tone="orange" />
+                    <ProjectMetric label="待回复" value={counts.respond} tone="error" />
+                    <ProjectMetric label="待审阅" value={counts.review} tone="orange" />
                   </>
                 ) : (
-                  <ProjectMetric label="Action" value={counts.action} tone="orange" />
+                  <ProjectMetric label="待操作" value={counts.action} tone="orange" />
                 )}
-                <ProjectMetric label="Pending" value={counts.pending} tone="attention" />
-                <ProjectMetric label="Working" value={counts.working} tone="working" />
+                <ProjectMetric label="等待中" value={counts.pending} tone="attention" />
+                <ProjectMetric label="进行中" value={counts.working} tone="working" />
               </div>
 
               <div className="border-t border-[var(--color-border-subtle)] pt-3">
                 <div className="flex items-center justify-between gap-3">
                   <div className="text-[11px] text-[var(--color-text-muted)]">
                     {isDegraded
-                      ? "Project config could not be resolved"
+                      ? "项目配置无法解析"
                       : orchestrator
-                        ? "Per-project orchestrator available"
-                        : "No running orchestrator"}
+                        ? "项目编排器可用"
+                        : "无运行中的编排器"}
                   </div>
                   {isDegraded ? (
                     <Link
                       href={projectHref}
                       className="border border-[var(--color-border-default)] px-3 py-1.5 text-[11px] font-semibold text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-hover)] hover:no-underline"
                     >
-                      Repair project
+                      修复项目
                     </Link>
                   ) : orchestrator ? (
                     <Link
@@ -1021,7 +1019,7 @@ function ProjectOverviewGrid({
                       className="orchestrator-btn flex items-center gap-2 px-3 py-1.5 text-[11px] font-semibold hover:no-underline"
                     >
                       <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)] opacity-80" />
-                      orchestrator
+                      编排器
                     </Link>
                   ) : (
                     <button
@@ -1031,8 +1029,8 @@ function ProjectOverviewGrid({
                       className="orchestrator-btn px-3 py-1.5 text-[11px] font-semibold disabled:cursor-wait disabled:opacity-70"
                     >
                       {spawningProjectIds.includes(project.id)
-                        ? "Spawning..."
-                        : "Spawn Orchestrator"}
+                        ? "启动中..."
+                        : "启动编排器"}
                     </button>
                   )}
                 </div>

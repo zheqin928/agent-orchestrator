@@ -38,9 +38,9 @@ export function PRCommentThread({
           >
             <path d="M9 5l7 7-7 7" />
           </svg>
-          <span className="session-detail-comments-strip__label">Unresolved Comments</span>
+          <span className="session-detail-comments-strip__label">未解决的评论</span>
           <span className="session-detail-comments-strip__count">{unresolvedThreads}</span>
-          <span className="session-detail-comments-strip__hint">click to expand</span>
+          <span className="session-detail-comments-strip__hint">点击展开</span>
         </div>
       </summary>
       <div className="session-detail-comments-strip__body">
@@ -71,7 +71,7 @@ export function PRCommentThread({
                     onClick={(event) => event.stopPropagation()}
                     className="session-detail-comment__view"
                   >
-                    view &rarr;
+                    查看 &rarr;
                   </a>
                 </div>
               </summary>
@@ -88,12 +88,12 @@ export function PRCommentThread({
                   )}
                 >
                   {isSending
-                    ? "Sending…"
+                    ? "发送中…"
                     : isSent
-                      ? "Sent ✓"
+                      ? "已发送 ✓"
                       : isError
-                        ? "Failed"
-                        : "Ask Agent to Fix"}
+                        ? "失败"
+                        : "请求 Agent 修复"}
                 </button>
               </div>
             </details>

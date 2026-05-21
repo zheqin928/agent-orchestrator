@@ -66,7 +66,7 @@ export function ProjectSettingsModal({ open, projectId, onClose }: ProjectSettin
       .then(async (response) => {
         const body = (await response.json().catch(() => null)) as ProjectSettingsResponse | null;
         if (!response.ok || !body?.project || body.degraded) {
-          throw new Error(body?.error ?? "Failed to load project settings.");
+          throw new Error(body?.error ?? "加载项目设置失败。");
         }
         if (!cancelled) {
           setProject(body.project);
@@ -74,7 +74,7 @@ export function ProjectSettingsModal({ open, projectId, onClose }: ProjectSettin
       })
       .catch((fetchError) => {
         if (!cancelled) {
-          setError(fetchError instanceof Error ? fetchError.message : "Failed to load project settings.");
+          setError(fetchError instanceof Error ? fetchError.message : "加载项目设置失败。");
         }
       })
       .finally(() => {
@@ -113,19 +113,19 @@ export function ProjectSettingsModal({ open, projectId, onClose }: ProjectSettin
         ref={modalRef}
         role="dialog"
         aria-modal="true"
-        aria-label="Project settings"
+        aria-label="项目设置"
         className="project-settings-modal"
         tabIndex={-1}
         onClick={(event) => event.stopPropagation()}
       >
         <div className="project-settings-modal__header">
           <div>
-            <p className="project-settings-modal__eyebrow">Project settings</p>
+            <p className="project-settings-modal__eyebrow">项目设置</p>
             <h2 className="project-settings-modal__title">{project?.name ?? projectId}</h2>
           </div>
           <button
             type="button"
-            aria-label="Close"
+            aria-label="关闭"
             onClick={onClose}
             className="project-settings-modal__close"
           >
@@ -134,7 +134,7 @@ export function ProjectSettingsModal({ open, projectId, onClose }: ProjectSettin
         </div>
 
         <div className="project-settings-modal__body">
-          {loading ? <div className="project-settings-modal__state">Loading project settings…</div> : null}
+          {loading ? <div className="project-settings-modal__state">正在加载项目设置…</div> : null}
           {!loading && error ? (
             <div role="alert" className="project-settings-modal__state project-settings-modal__state--error">
               {error}

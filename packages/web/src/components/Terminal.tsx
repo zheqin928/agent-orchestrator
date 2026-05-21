@@ -33,7 +33,7 @@ export function Terminal({ sessionId }: TerminalProps) {
       })
       .catch((err) => {
         console.error("[Terminal] Failed to get terminal URL:", err);
-        setError("Failed to connect to terminal server");
+        setError("连接终端服务器失败");
       });
   }, [sessionId]);
 
@@ -64,13 +64,13 @@ export function Terminal({ sessionId }: TerminalProps) {
                 : "text-[var(--color-text-muted)]",
           )}
         >
-          {terminalUrl ? "Connected" : (error ?? "Connecting...")}
+          {terminalUrl ? "已连接" : (error ?? "连接中...")}
         </span>
         <button
           onClick={() => setFullscreen(!fullscreen)}
           className="ml-auto rounded-[2px] px-2 py-0.5 text-[11px] text-[var(--color-text-muted)] transition-colors hover:bg-[var(--color-bg-secondary)] hover:text-[var(--color-text-primary)]"
         >
-          {fullscreen ? "exit fullscreen" : "fullscreen"}
+          {fullscreen ? "退出全屏" : "全屏"}
         </button>
       </div>
       <div className="w-full" style={{ height: fullscreen ? "calc(100dvh - 40px)" : "max(440px, calc(100dvh - 440px))" }}>
@@ -78,13 +78,13 @@ export function Terminal({ sessionId }: TerminalProps) {
           <iframe
             src={terminalUrl}
             className="h-full w-full border-0"
-            title={`Terminal: ${sessionId}`}
+            title={`终端：${sessionId}`}
             allow="clipboard-read; clipboard-write"
             sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
           />
         ) : (
           <div className="flex h-full items-center justify-center text-sm text-[var(--color-text-muted)]">
-            {error ?? "Connecting to terminal..."}
+            {error ?? "正在连接到终端..."}
           </div>
         )}
       </div>

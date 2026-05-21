@@ -42,14 +42,14 @@ export function PRStatus({ pr }: PRStatusProps) {
       {/* Merged badge */}
       {pr.state === "merged" && (
         <span className="inline-flex items-center rounded-full bg-[var(--color-chip-bg)] px-2 py-0.5 text-[10px] font-semibold text-[var(--color-text-secondary)]">
-          merged
+          已合并
         </span>
       )}
 
       {/* Draft badge */}
       {pr.isDraft && pr.state === "open" && (
         <span className="inline-flex items-center rounded-full bg-[rgba(125,133,144,0.08)] px-2 py-0.5 text-[10px] font-semibold text-[var(--color-text-muted)]">
-          draft
+          草稿
         </span>
       )}
 
@@ -63,7 +63,7 @@ export function PRStatus({ pr }: PRStatusProps) {
       {/* Review decision (only for open PRs with real data) */}
       {pr.state === "open" && pr.reviewDecision === "approved" && !rateLimited && !unenriched && (
         <span className="inline-flex items-center rounded-full bg-[rgba(63,185,80,0.1)] px-2 py-0.5 text-[10px] font-semibold text-[var(--color-accent-green)]">
-          approved
+          已批准
         </span>
       )}
     </div>
@@ -84,16 +84,16 @@ export function PRTableRow({ pr, muted = false }: PRTableRowProps) {
   const reviewLabel = hideData
     ? "—"
     : pr.state === "merged"
-      ? "merged"
+      ? "已合并"
       : pr.state === "closed"
-        ? "closed"
+        ? "已关闭"
     : pr.isDraft
-      ? "draft"
+      ? "草稿"
       : pr.reviewDecision === "approved"
-        ? "approved"
+        ? "已批准"
         : pr.reviewDecision === "changes_requested"
-          ? "changes requested"
-          : "needs review";
+          ? "请求修改"
+          : "待审阅";
 
   const reviewClass = hideData
     ? "text-[var(--color-text-tertiary)]"
@@ -175,24 +175,24 @@ export function PRCard({ pr, muted = false }: PRTableRowProps) {
   const ciLabel = hideData
     ? "—"
     : pr.ciStatus === "passing"
-      ? "passing"
+      ? "通过"
       : pr.ciStatus === "failing"
-        ? "failed"
-        : "pending";
+        ? "失败"
+        : "等待中";
 
   const reviewLabel = hideData
     ? "—"
     : pr.state === "merged"
-      ? "merged"
+      ? "已合并"
       : pr.state === "closed"
-        ? "closed"
+        ? "已关闭"
         : pr.isDraft
-          ? "draft"
+          ? "草稿"
           : pr.reviewDecision === "approved"
-            ? "approved"
+            ? "已批准"
             : pr.reviewDecision === "changes_requested"
-              ? "changes"
-              : "needs review";
+              ? "请求修改"
+              : "待审阅";
 
   const shimmer = <span className="inline-block h-3 w-10 animate-pulse rounded bg-[var(--color-bg-subtle)]" />;
   const diffLabel = hideData ? null : `+${pr.additions} -${pr.deletions}`;

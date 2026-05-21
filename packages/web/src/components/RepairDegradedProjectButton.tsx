@@ -21,12 +21,12 @@ export function RepairDegradedProjectButton({
       });
       const body = (await response.json().catch(() => null)) as { error?: string } | null;
       if (!response.ok) {
-        setError(body?.error ?? "Failed to repair project config.");
+        setError(body?.error ?? "修复项目配置失败。");
         return;
       }
       router.refresh();
     } catch {
-      setError("Network error while repairing project config.");
+      setError("修复项目配置时发生网络错误。");
     } finally {
       setSubmitting(false);
     }
@@ -40,7 +40,7 @@ export function RepairDegradedProjectButton({
         disabled={submitting}
         className="rounded-lg border border-[var(--color-accent)] bg-[var(--color-tint-blue)] px-4 py-2 text-sm font-semibold text-[var(--color-accent)] transition-colors hover:bg-[color-mix(in_srgb,var(--color-accent)_14%,transparent)] disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {submitting ? "Repairing..." : "Repair config"}
+        {submitting ? "修复中..." : "修复配置"}
       </button>
       {error ? (
         <p className="mt-3 text-sm text-[var(--color-status-error)]">{error}</p>

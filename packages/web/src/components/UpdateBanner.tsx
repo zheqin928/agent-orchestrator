@@ -90,7 +90,7 @@ export function UpdateBanner() {
         return;
       }
       setPhase("error");
-      setErrorMessage(body.message ?? "Update failed");
+      setErrorMessage(body.message ?? "更新失败");
     } catch (err) {
       setPhase("error");
       setErrorMessage(err instanceof Error ? err.message : String(err));
@@ -102,7 +102,7 @@ export function UpdateBanner() {
   if (dismissedFor === info.latest && phase === "idle") return null;
   if (phase === "started") return null;
 
-  const channelLabel = info.channel === "nightly" ? " (nightly)" : "";
+  const channelLabel = info.channel === "nightly" ? "（nightly）" : "";
 
   return (
     <div
@@ -117,7 +117,7 @@ export function UpdateBanner() {
         />
         <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-2">
           <span className="font-medium">
-            Update available{channelLabel}: {info.current} → {info.latest}
+            有可用更新{channelLabel}：{info.current} → {info.latest}
           </span>
           {phase === "blocked" && errorMessage ? (
             <span className="text-xs text-[var(--color-status-error)]">{errorMessage}</span>
@@ -126,10 +126,10 @@ export function UpdateBanner() {
               {errorMessage}
             </span>
           ) : phase === "starting" ? (
-            <span className="text-xs text-[var(--color-text-secondary)]">Starting…</span>
+            <span className="text-xs text-[var(--color-text-secondary)]">启动中…</span>
           ) : (
             <span className="text-xs text-[var(--color-text-secondary)]">
-              Click Update to install. The dashboard will restart.
+              点击“更新”进行安装。仪表盘将重启。
             </span>
           )}
         </div>
@@ -141,15 +141,15 @@ export function UpdateBanner() {
           disabled={phase === "starting"}
           className="rounded-sm border border-[var(--color-accent-amber-border)] bg-[var(--color-accent-amber)] px-3 py-1 text-xs font-medium text-[var(--color-text-inverse)] hover:bg-[color-mix(in_srgb,var(--color-accent-amber)_85%,black)] disabled:cursor-wait disabled:opacity-60"
         >
-          {phase === "starting" ? "Updating…" : "Update"}
+          {phase === "starting" ? "更新中…" : "更新"}
         </button>
         <button
           type="button"
           onClick={handleDismiss}
-          aria-label="Dismiss"
+          aria-label="忽略"
           className="rounded-sm px-2 py-1 text-xs text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-hover)]"
         >
-          Dismiss
+          忽略
         </button>
       </div>
     </div>

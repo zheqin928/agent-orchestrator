@@ -14,7 +14,7 @@ export function EmptyState({
   message,
   orchestratorHref,
   onSpawnOrchestrator = null,
-  spawnLabel = "Spawn Orchestrator",
+  spawnLabel = "启动编排器",
   spawnDisabled = false,
 }: EmptyStateProps) {
   return (
@@ -88,9 +88,9 @@ export function EmptyState({
             <p className="empty-state__text">{message}</p>
           ) : (
             <>
-              <p className="empty-state__headline">Ready to orchestrate</p>
+              <p className="empty-state__headline">准备开始编排</p>
               <p className="empty-state__hint">
-                Open the main orchestrator to start a session and fan out parallel agents across your codebase.
+                打开主编排器以启动会话，并在代码库中并行分发多个 Agent。
               </p>
               {orchestratorHref ? (
                 <a href={orchestratorHref} className="empty-state__cta">
@@ -109,7 +109,7 @@ export function EmptyState({
                     <circle cx="12" cy="17" r="2" />
                     <circle cx="18" cy="17" r="2" />
                   </svg>
-                  Open Orchestrator
+                  打开编排器
                 </a>
               ) : onSpawnOrchestrator ? (
                 <button

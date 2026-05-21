@@ -70,7 +70,7 @@ export function CopyDebugBundleButton({ projectId }: CopyDebugBundleButtonProps)
     try {
       const res = await fetch("/api/observability", { credentials: "same-origin" });
       if (!res.ok) {
-        showToast("Could not fetch observability snapshot", "error");
+        showToast("无法获取可观测性快照", "error");
         return;
       }
       const correlationId = res.headers.get("x-correlation-id");
@@ -79,7 +79,7 @@ export function CopyDebugBundleButton({ projectId }: CopyDebugBundleButtonProps)
       try {
         observabilityRaw = await res.json();
       } catch {
-        showToast("Could not parse observability snapshot", "error");
+        showToast("无法解析可观测性快照", "error");
         return;
       }
 
@@ -97,9 +97,9 @@ export function CopyDebugBundleButton({ projectId }: CopyDebugBundleButtonProps)
       };
 
       await navigator.clipboard.writeText(JSON.stringify(bundle, null, 2));
-      showToast("Debug bundle copied to clipboard", "success");
+      showToast("调试包已复制到剪贴板", "success");
     } catch {
-      showToast("Could not copy debug bundle", "error");
+      showToast("无法复制调试包", "error");
     } finally {
       setBusy(false);
     }
@@ -111,8 +111,8 @@ export function CopyDebugBundleButton({ projectId }: CopyDebugBundleButtonProps)
       className="dashboard-app-btn dashboard-app-btn--icon"
       onClick={() => void handleClick()}
       disabled={busy}
-      title="Copy debug bundle"
-      aria-label="Copy debug bundle for issue reports"
+      title="复制调试包"
+      aria-label="复制用于问题报告的调试包"
     >
       <svg
         width="12"

@@ -34,32 +34,32 @@ const zoneConfig: Record<
   }
 > = {
   merge: {
-    label: "Ready",
-    emptyMessage: "Nothing cleared to land yet.",
+    label: "就绪",
+    emptyMessage: "暂无可合并的项目。",
   },
   action: {
-    label: "Action",
-    emptyMessage: "No agents need your input.",
+    label: "待操作",
+    emptyMessage: "没有智能体需要您的输入。",
   },
   respond: {
-    label: "Respond",
-    emptyMessage: "No agents need your input.",
+    label: "待回复",
+    emptyMessage: "没有智能体需要您的输入。",
   },
   review: {
-    label: "Review",
-    emptyMessage: "No code waiting for review.",
+    label: "待审阅",
+    emptyMessage: "没有代码等待审阅。",
   },
   pending: {
-    label: "Pending",
-    emptyMessage: "Nothing blocked.",
+    label: "等待中",
+    emptyMessage: "没有阻塞项。",
   },
   working: {
-    label: "Working",
-    emptyMessage: "No agents running.",
+    label: "进行中",
+    emptyMessage: "没有正在运行的智能体。",
   },
   done: {
-    label: "Done",
-    emptyMessage: "No completed sessions.",
+    label: "已完成",
+    emptyMessage: "暂无已完成的会话。",
   },
 };
 
@@ -153,7 +153,7 @@ function AttentionZoneView({
                   className="mobile-session-list__view-all"
                   onClick={() => setShowAll(true)}
                 >
-                  View all {sessions.length}
+                  查看全部 {sessions.length}
                 </button>
               ) : null}
             </div>
@@ -239,14 +239,14 @@ function MobileSessionRow({
         type="button"
         className="mobile-session-row__preview"
         onClick={() => onPreview?.(session)}
-        aria-label={`Open ${getSessionTitle(session)}`}
+        aria-label={`打开 ${getSessionTitle(session)}`}
       >
         <div className="mobile-session-row__line">
           <span className="mobile-session-row__dot" data-level={level} aria-hidden="true" />
           <span className="mobile-session-row__title">{getSessionTitle(session)}</span>
         </div>
         <div className="mobile-session-row__meta">
-          {meta.length > 0 ? meta.join(" · ") : "No branch or PR metadata"}
+          {meta.length > 0 ? meta.join(" · ") : "无分支或 PR 元数据"}
         </div>
       </button>
       <div className="mobile-session-row__side">
@@ -254,7 +254,7 @@ function MobileSessionRow({
         <a
           href={projectSessionPath(session.projectId, session.id)}
           className="mobile-session-row__open"
-          aria-label={`Go to ${getSessionTitle(session)}`}
+          aria-label={`前往 ${getSessionTitle(session)}`}
         >
           <svg
             className="mobile-session-row__open-icon"
@@ -287,23 +287,23 @@ function MobileSessionRow({
  */
 export function getActionChipLabel(session: DashboardSession): string {
   // Respond-class: status (authoritative, can't be masked by stale activity)
-  if (session.status === "needs_input") return "needs input";
-  if (session.status === "stuck") return "stuck";
-  if (session.status === "errored") return "errored";
+  if (session.status === "needs_input") return "需要输入";
+  if (session.status === "stuck") return "卡住";
+  if (session.status === "errored") return "出错";
   // Respond-class: activity — check before review-class status so a crashed
   // agent with a non-terminal status (e.g. changes_requested) still reads
   // as "crashed" and not "changes".
-  if (session.activity === "waiting_input") return "waiting";
-  if (session.activity === "exited") return "crashed";
-  if (session.activity === "blocked") return "blocked";
+  if (session.activity === "waiting_input") return "等待中";
+  if (session.activity === "exited") return "已崩溃";
+  if (session.activity === "blocked") return "阻塞";
   // Review-class: status
-  if (session.status === "ci_failed") return "ci failed";
-  if (session.status === "changes_requested") return "changes";
+  if (session.status === "ci_failed") return "CI 失败";
+  if (session.status === "changes_requested") return "需修改";
   // Review-class: PR signals
-  if (session.pr?.ciStatus === "failing") return "ci failed";
-  if (session.pr?.reviewDecision === "changes_requested") return "changes";
-  if (session.pr && !session.pr.mergeability.noConflicts) return "conflicts";
-  return "action";
+  if (session.pr?.ciStatus === "failing") return "CI 失败";
+  if (session.pr?.reviewDecision === "changes_requested") return "需修改";
+  if (session.pr && !session.pr.mergeability.noConflicts) return "冲突";
+  return "待操作";
 }
 
 function SessionStateChip({
@@ -316,17 +316,17 @@ function SessionStateChip({
   let label = zoneConfig[level].label.toLowerCase();
 
   if (level === "merge" && session.pr && isPRMergeReady(session.pr)) {
-    label = "ready";
+    label = "就绪";
   } else if (level === "action") {
     label = getActionChipLabel(session);
   } else if (level === "respond") {
-    label = session.activity === "waiting_input" ? "waiting" : "needs input";
+    label = session.activity === "waiting_input" ? "等待中" : "需要输入";
   } else if (level === "review") {
-    label = session.pr?.reviewDecision === "changes_requested" ? "changes" : "review";
+    label = session.pr?.reviewDecision === "changes_requested" ? "需修改" : "审阅";
   } else if (level === "pending") {
-    label = session.pr?.unresolvedThreads ? "threads" : "pending";
+    label = session.pr?.unresolvedThreads ? "讨论" : "等待中";
   } else if (level === "working") {
-    label = session.activity === "idle" ? "idle" : "active";
+    label = session.activity === "idle" ? "空闲" : "活跃";
   }
 
   return <span className="mobile-session-row__chip">{label}</span>;

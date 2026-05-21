@@ -13,7 +13,7 @@ export function DegradedProjectState({
   projectId,
   resolveError,
   projectPath,
-  heading = "This project's config failed to load",
+  heading = "此项目的配置加载失败",
 }: DegradedProjectStateProps) {
   const matchedConfigPath = resolveError.match(/Local config at (.+?) (?:still uses|failed validation|must parse to an object|:)/)?.[1];
   const yamlPath = matchedConfigPath ?? `${projectPath}/agent-orchestrator.yaml or .yml`;
@@ -31,26 +31,26 @@ export function DegradedProjectState({
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-tertiary)]">
-              Degraded Project
+              异常项目
             </p>
             <h1 className="mt-2 text-2xl font-semibold">{heading}</h1>
             <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-              Project <span className="font-medium text-[var(--color-text-primary)]">{projectId}</span> could not be
-              resolved into an effective runtime config.
+              项目 <span className="font-medium text-[var(--color-text-primary)]">{projectId}</span> 无法被解析为
+              有效的运行时配置。
             </p>
           </div>
         </div>
 
         <div className="mt-6 rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-bg-elevated)] p-4">
           <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-tertiary)]">
-            Resolve Error
+            解析错误
           </p>
           <p className="mt-2 text-sm text-[var(--color-status-error)]">{resolveError}</p>
         </div>
 
         <div className="mt-4 rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-bg-elevated)] p-4">
           <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-tertiary)]">
-            Local Config Path
+            本地配置路径
           </p>
           <p className="mt-2 break-all font-[var(--font-mono)] text-sm text-[var(--color-text-primary)]">
             {yamlPath}
@@ -64,13 +64,13 @@ export function DegradedProjectState({
             href={projectDashboardPath(projectId)}
             className="rounded-lg border border-[var(--color-border-default)] px-4 py-2 text-sm font-medium text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-bg-elevated-hover)]"
           >
-            Back to project
+            返回项目
           </Link>
           <Link
             href={projectDashboardPath(projectId)}
             className="rounded-lg border border-[var(--color-border-default)] px-4 py-2 text-sm font-medium text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-bg-elevated-hover)]"
           >
-            Open dashboard view
+            打开仪表盘视图
           </Link>
         </div>
       </div>

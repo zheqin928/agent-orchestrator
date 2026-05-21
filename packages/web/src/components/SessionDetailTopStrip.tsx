@@ -55,7 +55,7 @@ export function SessionTopStrip({
         </a>
         <span className="session-detail-crumb-sep">/</span>
         <span className="session-detail-crumb-id">{crumbId}</span>
-        {isOrchestrator ? <span className="session-detail-mode-badge">orchestrator</span> : null}
+        {isOrchestrator ? <span className="session-detail-mode-badge">编排器</span> : null}
       </div>
 
       <div className="session-detail-identity">
@@ -124,7 +124,7 @@ export function SessionTopStrip({
                   <polyline points="1 4 1 10 7 10" />
                   <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
                 </svg>
-                Restore
+                恢复
               </button>
             ) : onKill ? (
               <button
@@ -141,7 +141,7 @@ export function SessionTopStrip({
                 >
                   <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                 </svg>
-                Kill
+                终止
               </button>
             ) : null}
           </div>

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ToastProvider, useToast } from "@/components/Toast";
 
 const IDENTITY_FIELD_TOOLTIP =
-  "These describe which repo this is. Change them via `ao project relink`.";
+  "这些字段描述该项目对应的仓库。请通过 `ao project relink` 修改。";
 
 interface ProjectSettingsFormProps {
   projectId: string;
@@ -56,7 +56,7 @@ function ProjectSettingsFormInner({ projectId, initialValues }: ProjectSettingsF
       const trimmed = reactions.trim();
       parsedReactions = trimmed ? (JSON.parse(trimmed) as Record<string, unknown>) : undefined;
     } catch {
-      setInlineError("Reactions must be valid JSON.");
+      setInlineError("Reactions 必须是有效的 JSON。");
       return;
     }
 
@@ -76,7 +76,7 @@ function ProjectSettingsFormInner({ projectId, initialValues }: ProjectSettingsF
 
       const body = (await response.json().catch(() => null)) as { error?: string } | null;
       if (!response.ok) {
-        const errorMessage = body?.error ?? "Failed to save project settings.";
+        const errorMessage = body?.error ?? "保存项目设置失败。";
         if (response.status === 400) {
           setInlineError(errorMessage);
         } else {
@@ -85,10 +85,10 @@ function ProjectSettingsFormInner({ projectId, initialValues }: ProjectSettingsF
         return;
       }
 
-      showToast("Project settings updated.", "success");
+      showToast("项目设置已更新。", "success");
       router.refresh();
     } catch {
-      setNetworkError("Network error while saving project settings.");
+      setNetworkError("保存项目设置时出现网络错误。");
     } finally {
       setSubmitting(false);
     }
@@ -100,11 +100,11 @@ function ProjectSettingsFormInner({ projectId, initialValues }: ProjectSettingsF
         <div className="project-settings-form__section-header">
           <div>
             <p className="project-settings-form__eyebrow">
-              Behavior
+              行为
             </p>
-            <h2 className="project-settings-form__section-title">Runtime configuration</h2>
+            <h2 className="project-settings-form__section-title">运行时配置</h2>
             <p className="project-settings-form__section-copy">
-              These values change how AO runs this project without changing which repository the project points at.
+              这些值会更改 AO 运行此项目的方式,但不会更改项目所指向的仓库。
             </p>
           </div>
           <button
@@ -113,35 +113,35 @@ function ProjectSettingsFormInner({ projectId, initialValues }: ProjectSettingsF
             disabled={submitting}
             className="project-settings-form__save"
           >
-            {submitting ? "Saving..." : "Save changes"}
+            {submitting ? "保存中..." : "保存更改"}
           </button>
         </div>
 
         <div className="project-settings-form__grid">
           <EditableField
             id="agent"
-            label="Agent"
+            label="智能体"
             value={agent}
             onChange={setAgent}
             placeholder="claude-code"
           />
           <EditableField
             id="runtime"
-            label="Runtime"
+            label="运行时"
             value={runtime}
             onChange={setRuntime}
             placeholder="tmux"
           />
           <EditableField
             id="tracker-plugin"
-            label="Tracker plugin"
+            label="跟踪器插件"
             value={trackerPlugin}
             onChange={setTrackerPlugin}
             placeholder="github"
           />
           <EditableField
             id="scm-plugin"
-            label="SCM plugin"
+            label="源码管理插件"
             value={scmPlugin}
             onChange={setScmPlugin}
             placeholder="github"
@@ -153,7 +153,7 @@ function ProjectSettingsFormInner({ projectId, initialValues }: ProjectSettingsF
             Reactions
           </label>
           <p className="project-settings-form__hint">
-            JSON object keyed by reaction name. This PATCH only sends behavior fields.
+            以反应名称为键的 JSON 对象。此 PATCH 仅发送行为字段。
           </p>
           <textarea
             id="reactions"
@@ -182,7 +182,7 @@ function ProjectSettingsFormInner({ projectId, initialValues }: ProjectSettingsF
               onClick={() => void submit()}
               className="project-settings-form__retry"
             >
-              Retry
+              重试
             </button>
           </div>
         ) : null}
@@ -190,20 +190,20 @@ function ProjectSettingsFormInner({ projectId, initialValues }: ProjectSettingsF
 
       <section className="project-settings-form__section">
         <p className="project-settings-form__eyebrow">
-          Identity
+          身份
         </p>
-        <h2 className="project-settings-form__section-title">Repository identity</h2>
+        <h2 className="project-settings-form__section-title">仓库身份</h2>
         <p className="project-settings-form__section-copy">
-          These fields are read-only because they define which repository AO considers this project to be.
+          这些字段为只读,因为它们定义了 AO 将此项目视为哪个仓库。
         </p>
 
         <div className="project-settings-form__grid">
-          <ReadonlyField id="identity-project-id" label="Project ID" value={initialValues.identity.projectId} />
-          <ReadonlyField id="identity-path" label="Path" value={initialValues.identity.path} />
-          <ReadonlyField id="identity-repo" label="Repo" value={initialValues.identity.repo} />
+          <ReadonlyField id="identity-project-id" label="项目 ID" value={initialValues.identity.projectId} />
+          <ReadonlyField id="identity-path" label="路径" value={initialValues.identity.path} />
+          <ReadonlyField id="identity-repo" label="仓库" value={initialValues.identity.repo} />
           <ReadonlyField
             id="identity-default-branch"
-            label="Default branch"
+            label="默认分支"
             value={initialValues.identity.defaultBranch}
           />
         </div>

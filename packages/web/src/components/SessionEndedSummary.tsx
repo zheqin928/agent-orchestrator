@@ -13,9 +13,9 @@ interface SessionEndedSummaryProps {
 }
 
 function formatEndedTime(isoDate: string | null | undefined): string {
-  if (!isoDate) return "Unknown";
+  if (!isoDate) return "未知";
   const timestamp = new Date(isoDate).getTime();
-  if (!Number.isFinite(timestamp)) return "Unknown";
+  if (!Number.isFinite(timestamp)) return "未知";
   return formatRelativeTime(timestamp);
 }
 
@@ -23,10 +23,10 @@ function getEndedSessionReason(session: DashboardSession): string {
   if (session.lifecycle?.runtime.reasonLabel) {
     return session.lifecycle.runtime.reasonLabel;
   }
-  if (session.status === "killed") return "Manually stopped";
-  if (session.status === "terminated") return "Runtime unavailable";
-  if (session.status === "done" || session.status === "merged") return "Work completed";
-  return "Terminal ended";
+  if (session.status === "killed") return "已手动停止";
+  if (session.status === "terminated") return "运行时不可用";
+  if (session.status === "done" || session.status === "merged") return "工作已完成";
+  return "终端已结束";
 }
 
 function getEndedSessionSummary(session: DashboardSession, headline: string): string {
@@ -54,21 +54,21 @@ export function SessionEndedSummary({
     session.lifecycle?.session.completedAt ??
     session.lifecycle?.session.lastTransitionAt ??
     session.lastActivityAt;
-  const runtimeLabel = session.lifecycle?.runtime.label ?? "Unavailable";
+  const runtimeLabel = session.lifecycle?.runtime.label ?? "不可用";
   const prLabel = pr
     ? pr.state === "merged"
-      ? "Merged"
+      ? "已合并"
       : pr.state === "closed"
-        ? "Closed"
+        ? "已关闭"
         : pr.mergeability.mergeable
-          ? "Open, merge-ready"
-          : "Open"
-    : "No PR";
+          ? "开放,可合并"
+          : "开放"
+    : "无 PR";
 
   return (
-    <section className="session-ended-summary" aria-label="Session ended summary">
+    <section className="session-ended-summary" aria-label="会话结束摘要">
       <div className="session-ended-summary__panel">
-        <div className="session-ended-summary__eyebrow">Terminal ended</div>
+        <div className="session-ended-summary__eyebrow">终端已结束</div>
         <div className="session-ended-summary__header">
           <div className="session-ended-summary__icon" aria-hidden="true">
             <svg fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
@@ -80,28 +80,28 @@ export function SessionEndedSummary({
           <div className="session-ended-summary__title-group">
             <h2 className="session-ended-summary__title">{headline}</h2>
             <p className="session-ended-summary__subtitle">
-              {reason}. The live terminal is gone, but the session context is still available.
+              {reason}。实时终端已结束,但会话上下文仍可用。
             </p>
           </div>
         </div>
 
         <div className="session-ended-summary__body">
           <div className="session-ended-summary__section">
-            <div className="session-ended-summary__label">What happened</div>
+            <div className="session-ended-summary__label">发生了什么</div>
             <p className="session-ended-summary__copy">{summary}</p>
           </div>
 
-          <div className="session-ended-summary__facts" aria-label="Session facts">
+          <div className="session-ended-summary__facts" aria-label="会话信息">
             <div className="session-ended-summary__fact">
-              <span>Session</span>
+              <span>会话</span>
               <strong>{session.id}</strong>
             </div>
             <div className="session-ended-summary__fact">
-              <span>Ended</span>
+              <span>结束时间</span>
               <strong>{formatEndedTime(endedAt)}</strong>
             </div>
             <div className="session-ended-summary__fact">
-              <span>Runtime</span>
+              <span>运行时</span>
               <strong>{runtimeLabel}</strong>
             </div>
             <div className="session-ended-summary__fact">
@@ -117,7 +117,7 @@ export function SessionEndedSummary({
                 onClick={onRestore}
                 className="session-ended-summary__primary"
               >
-                Restore session
+                恢复会话
               </button>
             ) : null}
             {pr ? (
@@ -131,17 +131,17 @@ export function SessionEndedSummary({
                     : "session-ended-summary__primary"
                 }
               >
-                Open PR #{pr.number}
+                打开 PR #{pr.number}
               </a>
             ) : null}
             <a href={dashboardHref} className="session-ended-summary__secondary">
-              Back to dashboard
+              返回仪表板
             </a>
           </div>
 
           {session.lifecycle?.evidence ? (
             <div className="session-ended-summary__evidence">
-              <span>Evidence</span>
+              <span>证据</span>
               <code>{session.lifecycle.evidence}</code>
             </div>
           ) : null}

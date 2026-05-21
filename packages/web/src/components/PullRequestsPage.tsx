@@ -36,10 +36,10 @@ const EMPTY_ORCHESTRATORS: DashboardOrchestratorLink[] = [];
 type PRFilterValue = "all" | "open" | "merged" | "closed";
 
 function getSectionLabel(filter: PRFilterValue): string {
-  if (filter === "open") return "Open PRs";
-  if (filter === "merged") return "Merged PRs";
-  if (filter === "closed") return "Closed PRs";
-  return "All PRs";
+  if (filter === "open") return "开放 PR";
+  if (filter === "merged") return "已合并 PR";
+  if (filter === "closed") return "已关闭 PR";
+  return "全部 PR";
 }
 
 export function PullRequestsPage({
@@ -128,7 +128,7 @@ export function PullRequestsPage({
         <div className="sidebar-mobile-backdrop" onClick={() => setMobileMenuOpen(false)} />
       )}
       <div className="dashboard-main flex-1 overflow-y-auto px-4 py-4 md:px-7 md:py-6">
-        <DynamicFavicon attentionLevels={attentionLevels} projectName={projectName ? `${projectName} PRs` : "Pull Requests"} />
+        <DynamicFavicon attentionLevels={attentionLevels} projectName={projectName ? `${projectName} PR` : "拉取请求"} />
         {isMobile ? (
           <section className="mobile-pr-page-header">
             <div className="mobile-pr-page-header__top">
@@ -138,7 +138,7 @@ export function PullRequestsPage({
                     type="button"
                     className="mobile-menu-toggle"
                     onClick={() => setMobileMenuOpen(true)}
-                    aria-label="Open menu"
+                    aria-label="打开菜单"
                   >
                     <svg
                       fill="none"
@@ -152,7 +152,7 @@ export function PullRequestsPage({
                   </button>
                 ) : null}
                 <h1 className="mobile-pr-page-header__title">
-                  {projectName ? `${projectName} PRs` : "Pull Requests"}
+                  {projectName ? `${projectName} PR` : "拉取请求"}
                 </h1>
               </div>
               <div className="mobile-pr-page-header__meta">
@@ -161,7 +161,7 @@ export function PullRequestsPage({
               </div>
             </div>
             <p className="mobile-pr-page-header__subtitle">
-              Open pull requests created by agents{allProjectsView ? " across projects" : " in this project"}.
+              由智能体创建的开放拉取请求{allProjectsView ? "(跨项目)" : "(本项目)"}。
             </p>
           </section>
         ) : (
@@ -173,7 +173,7 @@ export function PullRequestsPage({
                   type="button"
                   className="mobile-menu-toggle"
                   onClick={() => setMobileMenuOpen(true)}
-                  aria-label="Open menu"
+                  aria-label="打开菜单"
                 >
                   <svg
                     fill="none"
@@ -189,18 +189,18 @@ export function PullRequestsPage({
               <div className="dashboard-hero__primary">
                 <div className="dashboard-hero__heading">
                   <div>
-                    <h1 className="dashboard-title">{projectName ? `${projectName} PRs` : "Pull Requests"}</h1>
+                    <h1 className="dashboard-title">{projectName ? `${projectName} PR` : "拉取请求"}</h1>
                     <p className="dashboard-subtitle">
-                      Open pull requests created by agents{allProjectsView ? " across all projects" : " in this project"}.
+                      由智能体创建的开放拉取请求{allProjectsView ? "(跨所有项目)" : "(本项目)"}。
                     </p>
                   </div>
                 </div>
                 <div className="dashboard-stat-cards dashboard-stat-cards--persist-mobile">
                   <div className="dashboard-stat-card">
                     <span className="dashboard-stat-card__value">{openPRs.length}</span>
-                    <span className="dashboard-stat-card__label">Open PRs</span>
+                    <span className="dashboard-stat-card__label">开放 PR</span>
                     <span className="dashboard-stat-card__meta">
-                      {allProjectsView ? "Across all projects" : "In this project"}
+                      {allProjectsView ? "跨所有项目" : "本项目"}
                     </span>
                   </div>
                 </div>
@@ -214,10 +214,10 @@ export function PullRequestsPage({
           <div className={isMobile ? "mobile-pr-filter-tabs" : "mb-4 flex items-center gap-1.5"}>
             {(
               [
-                { value: "all", label: "All", count: allPRs.length },
-                { value: "open", label: "Open", count: openPRs.length },
-                { value: "merged", label: "Merged", count: mergedPRs.length },
-                { value: "closed", label: "Closed", count: closedPRs.length },
+                { value: "all", label: "全部", count: allPRs.length },
+                { value: "open", label: "开放", count: openPRs.length },
+                { value: "merged", label: "已合并", count: mergedPRs.length },
+                { value: "closed", label: "已关闭", count: closedPRs.length },
               ] as const
             ).map(({ value, label, count }) => (
               <button
@@ -249,9 +249,9 @@ export function PullRequestsPage({
               {prFilter === "all" ? (
                 <>
                   {openPRs.length > 0 && (
-                    <section className="mobile-pr-group" aria-label="Open pull requests">
+                    <section className="mobile-pr-group" aria-label="开放拉取请求">
                       <div className="mobile-pr-section-header">
-                        <span>Open</span>
+                        <span>开放</span>
                         <span>{openPRs.length}</span>
                       </div>
                       <div className="mobile-pr-list">
@@ -262,9 +262,9 @@ export function PullRequestsPage({
                     </section>
                   )}
                   {mergedPRs.length > 0 && (
-                    <section className="mobile-pr-group" aria-label="Merged pull requests">
+                    <section className="mobile-pr-group" aria-label="已合并拉取请求">
                       <div className="mobile-pr-section-header">
-                        <span>Merged</span>
+                        <span>已合并</span>
                         <span>{mergedPRs.length}</span>
                       </div>
                       <div className="mobile-pr-list">
@@ -275,9 +275,9 @@ export function PullRequestsPage({
                     </section>
                   )}
                   {closedPRs.length > 0 && (
-                    <section className="mobile-pr-group" aria-label="Closed pull requests">
+                    <section className="mobile-pr-group" aria-label="已关闭拉取请求">
                       <div className="mobile-pr-section-header">
-                        <span>Closed</span>
+                        <span>已关闭</span>
                         <span>{closedPRs.length}</span>
                       </div>
                       <div className="mobile-pr-list">
@@ -289,14 +289,14 @@ export function PullRequestsPage({
                   )}
                   {allPRs.length === 0 && (
                     <div className="mobile-pr-empty">
-                      No pull requests yet.
+                      暂无拉取请求。
                     </div>
                   )}
                 </>
               ) : (
                 <section className="mobile-pr-group" aria-label={getSectionLabel(prFilter)}>
                   <div className="mobile-pr-section-header">
-                    <span>{getSectionLabel(prFilter).replace(" PRs", "")}</span>
+                    <span>{getSectionLabel(prFilter).replace(" PR", "")}</span>
                     <span>{activeMobilePRs.length}</span>
                   </div>
                   <div className="mobile-pr-list">
@@ -305,7 +305,7 @@ export function PullRequestsPage({
                         <PRCard key={`${pr.owner}/${pr.repo}-${pr.number}`} pr={pr} muted={prFilter !== "open"} />
                       ))
                     ) : (
-                      <div className="mobile-pr-empty">No pull requests in this view.</div>
+                      <div className="mobile-pr-empty">此视图中暂无拉取请求。</div>
                     )}
                   </div>
                 </section>
@@ -320,19 +320,19 @@ export function PullRequestsPage({
                       PR
                     </th>
                     <th className="px-3 py-2 text-left text-[10.5px] font-mono font-500 uppercase tracking-[0.05em] text-[var(--color-text-muted)]">
-                      Title
+                      标题
                     </th>
                     <th className="px-3 py-2 text-left text-[10.5px] font-mono font-500 uppercase tracking-[0.05em] text-[var(--color-text-muted)]">
-                      Size
+                      规模
                     </th>
                     <th className="px-3 py-2 text-left text-[10.5px] font-mono font-500 uppercase tracking-[0.05em] text-[var(--color-text-muted)]">
                       CI
                     </th>
                     <th className="px-3 py-2 text-left text-[10.5px] font-mono font-500 uppercase tracking-[0.05em] text-[var(--color-text-muted)]">
-                      Review
+                      审阅
                     </th>
                     <th className="px-3 py-2 text-left text-[10.5px] font-mono font-500 uppercase tracking-[0.05em] text-[var(--color-text-muted)]">
-                      Threads
+                      讨论
                     </th>
                   </tr>
                 </thead>
@@ -342,7 +342,7 @@ export function PullRequestsPage({
                       {prFilter === "all" && (
                         <tr>
                           <td colSpan={6} className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-base)] px-3 py-1.5 text-[9.5px] font-mono font-semibold uppercase tracking-[0.06em] text-[var(--color-text-muted)]">
-                            Open
+                            开放
                           </td>
                         </tr>
                       )}
@@ -356,7 +356,7 @@ export function PullRequestsPage({
                       {prFilter === "all" && (
                         <tr>
                           <td colSpan={6} className="border-b border-t border-[var(--color-border-subtle)] bg-[var(--color-bg-base)] px-3 py-1.5 text-[9.5px] font-mono font-semibold uppercase tracking-[0.06em] text-[var(--color-text-muted)]">
-                            Merged
+                            已合并
                           </td>
                         </tr>
                       )}
@@ -370,7 +370,7 @@ export function PullRequestsPage({
                       {prFilter === "all" && (
                         <tr>
                           <td colSpan={6} className="border-b border-t border-[var(--color-border-subtle)] bg-[var(--color-bg-base)] px-3 py-1.5 text-[9.5px] font-mono font-semibold uppercase tracking-[0.06em] text-[var(--color-text-muted)]">
-                            Closed
+                            已关闭
                           </td>
                         </tr>
                       )}
@@ -382,7 +382,7 @@ export function PullRequestsPage({
                   {allPRs.length === 0 && (
                     <tr>
                       <td colSpan={6} className="px-4 py-6 text-[12px] text-[var(--color-text-secondary)]">
-                        No pull requests yet.
+                        暂无拉取请求。
                       </td>
                     </tr>
                   )}
@@ -394,7 +394,7 @@ export function PullRequestsPage({
       </div>
       {isMobile ? (
         <MobileBottomNav
-          ariaLabel="PR navigation"
+          ariaLabel="PR 导航"
           activeTab="prs"
           dashboardHref={dashboardHref}
           prsHref={prsHref}

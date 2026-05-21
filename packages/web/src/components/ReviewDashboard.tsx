@@ -50,13 +50,13 @@ interface ReviewDetailsState {
 }
 
 const COLUMN_HINTS: Record<ReviewBoardColumn, string> = {
-  queued: "Review work requested but not executing yet.",
-  reviewing: "A reviewer is reading a snapshot.",
-  triage: "Findings need a human decision.",
-  waiting: "Feedback is with the coding worker.",
-  clean: "No open AO findings remain.",
-  failed: "Reviewer runs that need retry or inspection.",
-  outdated: "Runs superseded by newer worker commits.",
+  queued: "已请求审阅，但尚未执行。",
+  reviewing: "审阅者正在读取快照。",
+  triage: "审阅结果需要人工决策。",
+  waiting: "反馈已交给编码工作者。",
+  clean: "无未处理的 AO 结果。",
+  failed: "需要重试或检查的审阅运行。",
+  outdated: "已被新提交取代的运行。",
 };
 
 const SUPERSEDABLE_REVIEW_STATUSES = new Set([
@@ -72,11 +72,11 @@ function formatRelativeTime(value: string): string {
   if (Number.isNaN(timestamp)) return value;
   const diffMs = Date.now() - timestamp;
   const diffMin = Math.floor(diffMs / 60_000);
-  if (diffMin < 1) return "just now";
-  if (diffMin < 60) return `${diffMin}m ago`;
+  if (diffMin < 1) return "刚刚";
+  if (diffMin < 60) return `${diffMin}分钟前`;
   const diffHours = Math.floor(diffMin / 60);
-  if (diffHours < 24) return `${diffHours}h ago`;
-  return `${Math.floor(diffHours / 24)}d ago`;
+  if (diffHours < 24) return `${diffHours}小时前`;
+  return `${Math.floor(diffHours / 24)}天前`;
 }
 
 function formatStatus(value: string): string {
@@ -103,10 +103,10 @@ function canSendFeedbackToWorker(run: DashboardReviewRun): boolean {
 }
 
 function getWorkerAvailabilityLabel(run: DashboardReviewRun): string {
-  if (!run.workerHasRuntime) return "no runtime";
-  if (run.workerActivity === "exited") return "exited";
-  if (run.workerRuntimeState === "missing") return "runtime missing";
-  if (run.workerRuntimeState === "exited") return "runtime exited";
+  if (!run.workerHasRuntime) return "无运行时";
+  if (run.workerActivity === "exited") return "已退出";
+  if (run.workerRuntimeState === "missing") return "运行时缺失";
+  if (run.workerRuntimeState === "exited") return "运行时已退出";
   return run.workerActivity ?? run.workerStatus ?? "worker";
 }
 
@@ -235,7 +235,7 @@ function ReviewDashboardInner({
     : workerOptions;
   const codingHref = projectId ? projectDashboardPath(projectId) : "/?project=all";
   const reviewHref = projectReviewPath(projectId);
-  const headerProjectLabel = projectName ?? (allProjectsView ? "All projects" : "Reviews");
+  const headerProjectLabel = projectName ?? (allProjectsView ? "所有项目" : "代码审阅");
 
   const handleToggleSidebar = () => {
     if (isMobile) {
@@ -281,10 +281,10 @@ function ReviewDashboardInner({
         ),
       ]);
       setNewReviewMenuOpen(false);
-      showToast("Review run requested", "success");
+      showToast("已请求审阅运行", "success");
     } catch (error) {
       const message = error instanceof Error ? error.message : "Failed to request review";
-      showToast(`Review failed: ${message}`, "error");
+      showToast(`审阅失败：${message}`, "error");
     } finally {
       setRequestingSessionId(null);
     }
@@ -338,13 +338,13 @@ function ReviewDashboardInner({
       );
       if (data.run.status === "failed") {
         showToast(
-          `Review failed: ${data.run.terminationReason ?? "Reviewer execution failed"}`,
+          `审阅失败：${data.run.terminationReason ?? "审阅器执行失败"}`,
           "error",
         );
         return;
       }
       showToast(
-        data.run.openFindingCount > 0 ? "Review findings ready" : "Review completed clean",
+        data.run.openFindingCount > 0 ? "审阅结果就绪" : "审阅完成，无问题",
         "success",
       );
     } catch (error) {
@@ -352,7 +352,7 @@ function ReviewDashboardInner({
       setReviewRuns((current) =>
         current.map((entry) => (entry.id === run.id ? { ...entry, status: "failed" } : entry)),
       );
-      showToast(`Review failed: ${message}`, "error");
+      showToast(`审阅失败：${message}`, "error");
     } finally {
       setExecutingRunIds((current) => {
         const next = new Set(current);
@@ -416,7 +416,7 @@ function ReviewDashboardInner({
         };
       });
       showToast(
-        `Sent ${pluralize(data.sentFindingCount ?? 0, "finding")} to ${run.linkedSessionId}`,
+        `已向 ${run.linkedSessionId} 发送 ${data.sentFindingCount ?? 0} 项结果`,
         "success",
       );
       router.push(
@@ -424,7 +424,7 @@ function ReviewDashboardInner({
       );
     } catch (error) {
       const message = error instanceof Error ? error.message : "Failed to send review findings";
-      showToast(`Feedback failed: ${message}`, "error");
+      showToast(`发送反馈失败：${message}`, "error");
     } finally {
       setSendingRunIds((current) => {
         const next = new Set(current);
@@ -464,11 +464,11 @@ function ReviewDashboardInner({
             : entry,
         ),
       );
-      showToast("Orchestrator restored", "success");
+      showToast("编排器已恢复", "success");
       router.push(projectSessionPath(orchestrator.projectId, orchestrator.id));
     } catch (error) {
       const message = error instanceof Error ? error.message : "Failed to restore orchestrator";
-      showToast(`Restore failed: ${message}`, "error");
+      showToast(`恢复失败：${message}`, "error");
     } finally {
       setRestoringOrchestratorId(null);
     }
@@ -512,7 +512,7 @@ function ReviewDashboardInner({
             type="button"
             className="dashboard-app-sidebar-toggle"
             onClick={handleToggleSidebar}
-            aria-label="Toggle sidebar"
+            aria-label="切换侧边栏"
           >
             {isMobile ? (
               <svg
@@ -547,16 +547,16 @@ function ReviewDashboardInner({
           </div>
           <span className="dashboard-app-header__sep" aria-hidden="true" />
           <span className="dashboard-app-header__project">{headerProjectLabel}</span>
-          <nav className="workspace-mode-switch" aria-label="Workspace mode">
+          <nav className="workspace-mode-switch" aria-label="工作区模式">
             <Link href={codingHref} className="workspace-mode-switch__item">
-              Coding
+              编码
             </Link>
             <Link
               href={reviewHref}
               className="workspace-mode-switch__item workspace-mode-switch__item--active"
               aria-current="page"
             >
-              Reviews
+              代码审阅
             </Link>
           </nav>
           <div className="dashboard-app-header__spacer" />
@@ -584,14 +584,14 @@ function ReviewDashboardInner({
                     <path d="M20 19v-4h-4" />
                   </svg>
                   {restoringOrchestratorId === currentProjectOrchestrator.id
-                    ? "Restoring"
-                    : "Restore orchestrator"}
+                    ? "恢复中"
+                    : "恢复编排器"}
                 </button>
               ) : (
                 <Link
                   href={orchestratorHref}
                   className="dashboard-app-btn dashboard-app-btn--amber"
-                  aria-label="Open project orchestrator"
+                  aria-label="打开项目编排器"
                 >
                   <svg
                     width="12"
@@ -608,7 +608,7 @@ function ReviewDashboardInner({
                     <circle cx="12" cy="17" r="2" />
                     <circle cx="18" cy="17" r="2" />
                   </svg>
-                  Orchestrator
+                  编排器
                 </Link>
               )
             ) : null}
@@ -632,7 +632,7 @@ function ReviewDashboardInner({
                 >
                   <path d="M12 5v14M5 12h14" />
                 </svg>
-                New Review
+                新建审阅
               </button>
               {newReviewMenuOpen ? (
                 <div className="review-new-menu__popover" role="menu">
@@ -687,17 +687,17 @@ function ReviewDashboardInner({
             <div className="review-main-header">
               <div>
                 <h1 className="dashboard-main__title">
-                  {projectName ? `${projectName} Reviews` : "Reviews"}
+                  {projectName ? `${projectName} 审阅` : "代码审阅"}
                 </h1>
                 <p className="dashboard-main__subtitle">
-                  AO-local reviewer runs, findings, and worker handoffs
-                  {allProjectsView ? " across all projects" : " for this project"}.
+                  AO 本地审阅器运行、结果与工作者交接
+                  {allProjectsView ? "（所有项目）" : "（本项目）"}。
                 </p>
               </div>
               <div className="dashboard-stat-cards dashboard-stat-cards--persist-mobile">
-                <ReviewMetric label="Runs" value={reviewRuns.length} meta="Total review runs" />
-                <ReviewMetric label="Active" value={activeRunCount} meta="Open review loops" />
-                <ReviewMetric label="Findings" value={openFindingCount} meta="Open AO findings" />
+                <ReviewMetric label="运行" value={reviewRuns.length} meta="总审阅运行数" />
+                <ReviewMetric label="活跃" value={activeRunCount} meta="进行中的审阅循环" />
+                <ReviewMetric label="结果" value={openFindingCount} meta="未处理的 AO 结果" />
               </div>
             </div>
 
@@ -709,16 +709,15 @@ function ReviewDashboardInner({
 
             {reviewRuns.length === 0 ? (
               <section className="review-empty-state">
-                <div className="review-empty-state__title">No review runs yet</div>
+                <div className="review-empty-state__title">尚无审阅运行</div>
                 <p className="review-empty-state__body">
-                  Reviewer runs will appear here after a worker is ready for review or after a
-                  manual review is requested.
+                  当工作者准备好接受审阅或手动请求审阅后，审阅运行将出现在此处。
                 </p>
                 <Link
                   href={projectId ? projectDashboardPath(projectId) : "/?project=all"}
                   className="review-empty-state__link"
                 >
-                  Back to coding dashboard
+                  返回编码仪表盘
                 </Link>
               </section>
             ) : (
@@ -854,15 +853,15 @@ function ReviewCard({
   const workerHref = projectDashboardSessionPath(run.projectId, run.linkedSessionId);
   const title = run.workerTitle ?? run.linkedSessionId;
   const status = formatStatus(run.status);
-  const totalFindingLabel = pluralize(run.findingCount, "finding");
+  const totalFindingLabel = `${run.findingCount} 项结果`;
   const secondaryText =
     run.summary ??
     (run.status === "clean"
-      ? "Reviewer completed without open AO findings."
-      : `Review requested for ${run.linkedSessionId}.`);
+      ? "审阅器已完成，未发现未处理的 AO 问题。"
+      : `已为 ${run.linkedSessionId} 请求审阅。`);
   const truthLine = `${status} · ${totalFindingLabel}${
-    run.dismissedFindingCount > 0 ? ` · ${pluralize(run.dismissedFindingCount, "dismissed")}` : ""
-  }${run.sentFindingCount > 0 ? ` · ${pluralize(run.sentFindingCount, "sent")}` : ""} · worker ${getWorkerAvailabilityLabel(run)}`;
+    run.dismissedFindingCount > 0 ? ` · ${run.dismissedFindingCount} 项已忽略` : ""
+  }${run.sentFindingCount > 0 ? ` · ${run.sentFindingCount} 项已发送` : ""} · 工作者 ${getWorkerAvailabilityLabel(run)}`;
   const canExecute = isExecuting || run.status === "queued" || run.status === "failed";
   const feedbackAvailable = canSendFeedbackToWorker(run);
   const dotClass =
@@ -906,7 +905,7 @@ function ReviewCard({
             <path d="M4 19.5V5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-1.5Z" />
             <path d="M8 7h6M8 11h6M8 15h4" />
           </svg>
-          details
+          详情
         </button>
       </div>
 
@@ -950,7 +949,7 @@ function ReviewCard({
               <span className="alert-row__text">
                 <button type="button" onClick={() => onOpenDetails(run)}>
                   <span className="font-bold">{run.openFindingCount}</span>{" "}
-                  {run.openFindingCount === 1 ? "open finding" : "open findings"}
+                  项未处理结果
                 </button>
               </span>
               <button
@@ -958,7 +957,7 @@ function ReviewCard({
                 className="alert-row__action"
                 onClick={() => onOpenDetails(run)}
               >
-                view
+                查看
               </button>
             </div>
           </div>
@@ -966,7 +965,7 @@ function ReviewCard({
 
         <div className="session-card__footer">
           <span className="card__status min-w-0 truncate">
-            {status} · updated {formatRelativeTime(run.updatedAt)}
+            {status} · 更新于 {formatRelativeTime(run.updatedAt)}
           </span>
           <div className="session-card__footer-actions">
             {canExecute ? (
@@ -986,11 +985,11 @@ function ReviewCard({
                 >
                   <path d="M5 3v18l15-9-15-9Z" />
                 </svg>
-                {isExecuting ? "Running" : run.status === "failed" ? "Retry" : "Run"}
+                {isExecuting ? "运行中" : run.status === "failed" ? "重试" : "运行"}
               </button>
             ) : null}
             <Link href={workerHref} className="session-card__control session-card__review-control">
-              Worker
+              工作者
             </Link>
             {feedbackAvailable ? (
               <button
@@ -999,17 +998,17 @@ function ReviewCard({
                 disabled={isSending || run.openFindingCount === 0}
                 title={
                   run.openFindingCount === 0
-                    ? "No open review findings to send."
-                    : "Send review findings to the worker."
+                    ? "没有可发送的未处理审阅结果。"
+                    : "向工作者发送审阅结果。"
                 }
                 onClick={() => onSendFeedback(run)}
               >
-                {isSending ? "Sending" : "Feedback"}
+                {isSending ? "发送中" : "反馈"}
               </button>
             ) : (
               <span
                 className="session-card__control session-card__terminal-link review-card__disabled-control"
-                title="This worker has no live runtime to receive terminal feedback."
+                title="该工作者没有可接收终端反馈的活跃运行时。"
               >
                 {getWorkerAvailabilityLabel(run)}
               </span>
@@ -1064,7 +1063,7 @@ function ReviewDetailsDrawer({
             type="button"
             className="review-detail-panel__close"
             onClick={onClose}
-            aria-label="Close review details"
+            aria-label="关闭审阅详情"
           >
             x
           </button>
@@ -1079,49 +1078,48 @@ function ReviewDetailsDrawer({
 
         <div className="review-detail-panel__actions">
           <Link href={workerHref} onClick={onOpenWorker}>
-            Open worker
+            打开工作者
           </Link>
           {run.workerPrUrl ? (
             <a href={run.workerPrUrl} target="_blank" rel="noreferrer">
-              Open PR
+              打开 PR
             </a>
           ) : null}
-          {feedbackAvailable ? <Link href={feedbackHref}>Open terminal</Link> : null}
+          {feedbackAvailable ? <Link href={feedbackHref}>打开终端</Link> : null}
           {feedbackAvailable && openFindings.length > 0 ? (
             <button type="button" disabled={isSending} onClick={() => onSendFeedback(run)}>
-              {isSending ? "Sending feedback" : "Send feedback"}
+              {isSending ? "发送反馈中" : "发送反馈"}
             </button>
           ) : null}
         </div>
 
         {!feedbackAvailable ? (
           <div className="review-detail-panel__notice">
-            Worker feedback is unavailable because the linked worker is{" "}
-            {getWorkerAvailabilityLabel(run)}. Open the worker card to inspect or restore it before
-            sending review findings back.
+            无法发送工作者反馈，因为关联的工作者状态为{" "}
+            {getWorkerAvailabilityLabel(run)}。请打开工作者卡片查看或恢复后再发送审阅结果。
           </div>
         ) : null}
 
         <div className="review-detail-panel__summary">
           <div className="review-detail-panel__summary-item">
-            <span>Open</span>
+            <span>未处理</span>
             <strong>{openFindings.length || run.openFindingCount}</strong>
           </div>
           <div className="review-detail-panel__summary-item">
-            <span>Total</span>
+            <span>总计</span>
             <strong>{run.findingCount}</strong>
           </div>
           <div className="review-detail-panel__summary-item">
-            <span>Updated</span>
+            <span>更新</span>
             <strong>{formatRelativeTime(run.updatedAt)}</strong>
           </div>
         </div>
 
         <div className="review-detail-panel__content">
-          {loading ? <div className="review-detail-panel__empty">Loading findings...</div> : null}
+          {loading ? <div className="review-detail-panel__empty">加载结果中...</div> : null}
           {error ? <div className="review-detail-panel__error">{error}</div> : null}
           {!loading && !error && findings.length === 0 ? (
-            <div className="review-detail-panel__empty">No findings captured for this run.</div>
+            <div className="review-detail-panel__empty">本次运行未记录任何结果。</div>
           ) : null}
           {!loading && !error
             ? findings.map((finding) => {

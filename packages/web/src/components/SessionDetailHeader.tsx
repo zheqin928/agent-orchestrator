@@ -42,12 +42,12 @@ function normalizeActivityLabelForClass(activityLabel: string): string {
 
 function OrchestratorZonePills({ zones }: { zones: OrchestratorZones }) {
   const stats: Array<{ value: number; label: string; toneClass: string }> = [
-    { value: zones.merge, label: "merge", toneClass: "topbar-zone-pill--merge" },
-    { value: zones.respond, label: "respond", toneClass: "topbar-zone-pill--respond" },
-    { value: zones.review, label: "review", toneClass: "topbar-zone-pill--review" },
-    { value: zones.working, label: "working", toneClass: "topbar-zone-pill--working" },
-    { value: zones.pending, label: "pending", toneClass: "topbar-zone-pill--pending" },
-    { value: zones.done, label: "done", toneClass: "topbar-zone-pill--done" },
+    { value: zones.merge, label: "合并", toneClass: "topbar-zone-pill--merge" },
+    { value: zones.respond, label: "回复", toneClass: "topbar-zone-pill--respond" },
+    { value: zones.review, label: "审阅", toneClass: "topbar-zone-pill--review" },
+    { value: zones.working, label: "进行中", toneClass: "topbar-zone-pill--working" },
+    { value: zones.pending, label: "等待中", toneClass: "topbar-zone-pill--pending" },
+    { value: zones.done, label: "已完成", toneClass: "topbar-zone-pill--done" },
   ].filter((s) => s.value > 0);
 
   if (stats.length === 0) return null;
@@ -114,7 +114,7 @@ export function SessionDetailHeader({
           type="button"
           className="dashboard-app-sidebar-toggle"
           onClick={onToggleSidebar}
-          aria-label="Toggle sidebar"
+          aria-label="切换侧边栏"
         >
           {isMobile ? (
             <svg
@@ -156,7 +156,7 @@ export function SessionDetailHeader({
             <span className="dashboard-app-header__project">{headerProjectLabel}</span>
           )}
           <span className="dashboard-app-header__session-id topbar-mobile-only">{session.id}</span>
-          {isOrchestrator && <span className="session-detail-mode-badge">orchestrator</span>}
+          {isOrchestrator && <span className="session-detail-mode-badge">编排器</span>}
         </div>
         <div className="topbar-session-pills">
           <div
@@ -268,7 +268,7 @@ export function SessionDetailHeader({
               <path d="M4 13a8 8 0 0 0 14.9 3.98" />
               <path d="M20 19v-4h-4" />
             </svg>
-            <span className="topbar-btn-label">Restore</span>
+            <span className="topbar-btn-label">恢复</span>
           </button>
         ) : !isOrchestrator && !terminalEnded ? (
           <button
@@ -285,7 +285,7 @@ export function SessionDetailHeader({
             >
               <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
             </svg>
-            <span className="topbar-btn-label">Kill</span>
+            <span className="topbar-btn-label">终止</span>
           </button>
         ) : null}
 
@@ -294,7 +294,7 @@ export function SessionDetailHeader({
             type="button"
             className="dashboard-app-btn dashboard-app-btn--amber"
             onClick={onRelaunchClean}
-            aria-label="Launch Orchestrator (clean context)"
+            aria-label="启动编排器(清空上下文)"
           >
             <svg
               className="h-3.5 w-3.5"
@@ -309,7 +309,7 @@ export function SessionDetailHeader({
               <path d="M4 13a8 8 0 0 0 14.9 3.98" />
               <path d="M20 19v-4h-4" />
             </svg>
-            <span className="topbar-btn-label">Relaunch (clean)</span>
+            <span className="topbar-btn-label">重新启动(清空)</span>
           </button>
         ) : null}
 
@@ -317,7 +317,7 @@ export function SessionDetailHeader({
           <a
             href={orchestratorHref}
             className="dashboard-app-btn dashboard-app-btn--amber topbar-desktop-only"
-            aria-label="Orchestrator"
+            aria-label="编排器"
           >
             <svg
               width="12"
@@ -334,7 +334,7 @@ export function SessionDetailHeader({
               <circle cx="12" cy="17" r="2" />
               <circle cx="18" cy="17" r="2" />
             </svg>
-            <span className="topbar-btn-label">Orchestrator</span>
+            <span className="topbar-btn-label">编排器</span>
           </a>
         ) : null}
       </div>

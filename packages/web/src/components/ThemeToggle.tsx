@@ -25,8 +25,8 @@ export function ThemeToggle({ className, label }: ThemeToggleProps) {
         className ??
         "flex h-9 w-9 items-center justify-center border border-[var(--color-border-strong)] bg-[var(--color-bg-elevated)] text-[var(--color-text-primary)] transition-colors hover:bg-[var(--color-bg-elevated-hover)]"
       }
-      aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
-      title={`Switch to ${isDark ? "light" : "dark"} mode`}
+      aria-label={`切换到${isDark ? "浅色" : "深色"}模式`}
+      title={`切换到${isDark ? "浅色" : "深色"}模式`}
     >
       {isDark ? (
         <svg className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">

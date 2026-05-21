@@ -105,7 +105,7 @@ export function ErrorDisplay({
   title,
   message,
   tone = "error",
-  detailsTitle = "Technical details",
+  detailsTitle = "技术详情",
   error,
   primaryAction,
   secondaryAction,

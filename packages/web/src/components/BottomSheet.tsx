@@ -17,13 +17,13 @@ function getRelativeTime(dateStr: string): string {
   const then = new Date(dateStr).getTime();
   const diffMs = now - then;
   const diffSec = Math.floor(diffMs / 1000);
-  if (diffSec < 60) return `${diffSec}s ago`;
+  if (diffSec < 60) return `${diffSec}秒前`;
   const diffMin = Math.floor(diffSec / 60);
-  if (diffMin < 60) return `${diffMin}m ago`;
+  if (diffMin < 60) return `${diffMin}分钟前`;
   const diffHr = Math.floor(diffMin / 60);
-  if (diffHr < 24) return `${diffHr}h ago`;
+  if (diffHr < 24) return `${diffHr}小时前`;
   const diffDay = Math.floor(diffHr / 24);
-  return `${diffDay}d ago`;
+  return `${diffDay}天前`;
 }
 
 function formatTagLabel(value: string): string {
@@ -164,9 +164,9 @@ export function BottomSheet({
           <>
             <div className="bottom-sheet__header">
               <h2 id="bottom-sheet-title" className="bottom-sheet__title">
-                Terminate session?
+                终止会话？
               </h2>
-              <p className="bottom-sheet__subtitle">This action cannot be undone.</p>
+              <p className="bottom-sheet__subtitle">此操作无法撤销。</p>
             </div>
 
             <div className="bottom-sheet__session-info">
@@ -199,7 +199,7 @@ export function BottomSheet({
                   {title}
                 </h2>
                 <p className="bottom-sheet__subtitle">
-                  {formatTagLabel(attention)} · started {getRelativeTime(session.createdAt)}
+                  {formatTagLabel(attention)} · 开始于 {getRelativeTime(session.createdAt)}
                 </p>
 
                 <div className="bottom-sheet__preview-meta">
@@ -219,17 +219,17 @@ export function BottomSheet({
                   <div className="bottom-sheet__preview-pills">
                     <span className="bottom-sheet__tag bottom-sheet__tag--neutral">
                       {pr.ciStatus === "passing"
-                        ? "CI passing"
+                        ? "CI 通过"
                         : pr.ciStatus === "failing"
-                          ? "CI failed"
-                          : "CI pending"}
+                          ? "CI 失败"
+                          : "CI 等待中"}
                     </span>
                     <span className="bottom-sheet__tag bottom-sheet__tag--accent">
                       {pr.reviewDecision === "approved"
-                        ? "approved"
+                        ? "已批准"
                         : pr.reviewDecision === "changes_requested"
-                          ? "changes requested"
-                          : "needs review"}
+                          ? "请求修改"
+                          : "待审阅"}
                     </span>
                     {showTerminalStatePills ? (
                       <span className="bottom-sheet__tag bottom-sheet__tag--accent">
@@ -268,14 +268,14 @@ export function BottomSheet({
                 className="bottom-sheet__btn bottom-sheet__btn--cancel"
                 onClick={onCancel}
               >
-                Cancel
+                取消
               </button>
               <button
                 type="button"
                 className="bottom-sheet__btn bottom-sheet__btn--danger"
                 onClick={onConfirm}
               >
-                Terminate
+                终止
               </button>
             </>
           ) : (
@@ -284,7 +284,7 @@ export function BottomSheet({
                 href={projectSessionPath(session.projectId, session.id)}
                 className="bottom-sheet__btn bottom-sheet__btn--primary"
               >
-                Open session
+                打开会话
               </a>
               {isMergeReady && session.pr && onMerge ? (
                 <button
@@ -296,7 +296,7 @@ export function BottomSheet({
                     }
                   }}
                 >
-                  Merge
+                  合并
                 </button>
               ) : hasLiveTerminateAction && onRequestKill ? (
                 <button
@@ -317,7 +317,7 @@ export function BottomSheet({
                     <path d="M19 6l-1 14H6L5 6" />
                     <path d="M10 11v6M14 11v6" />
                   </svg>
-                  Terminate
+                  终止
                 </button>
               ) : null}
             </>

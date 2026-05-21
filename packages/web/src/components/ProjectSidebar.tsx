@@ -160,7 +160,7 @@ const SessionRow = memo(function SessionRow({
         }}
         className="project-sidebar__sess-link flex flex-1 min-w-0 items-center gap-[7px]"
         aria-current={isActive ? "page" : undefined}
-        aria-label={`Open ${title}`}
+        aria-label={`打开 ${title}`}
       >
         <SessionDot level={level} />
         <div className="flex-1 min-w-0">
@@ -187,8 +187,8 @@ const SessionRow = memo(function SessionRow({
           onStartRename(session, title);
         }}
         className="project-sidebar__sess-rename-btn opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus:opacity-100"
-        title="Rename session"
-        aria-label={`Rename ${session.id}`}
+        title="重命名会话"
+        aria-label={`重命名 ${session.id}`}
       >
         <svg
           width="11"
@@ -218,7 +218,7 @@ function ProjectSidebarEmpty({ collapsed = false }: { collapsed?: boolean }) {
         <button
           type="button"
           className="project-sidebar__add-btn"
-          aria-label="New project"
+          aria-label="新建项目"
           onClick={() => setAddProjectOpen(true)}
         >
           <svg
@@ -239,11 +239,11 @@ function ProjectSidebarEmpty({ collapsed = false }: { collapsed?: boolean }) {
   return (
     <aside className="project-sidebar flex h-full flex-col">
       <div className="project-sidebar__compact-hdr">
-        <span className="project-sidebar__sect-label">Projects</span>
+        <span className="project-sidebar__sect-label">项目</span>
         <button
           type="button"
           className="project-sidebar__add-btn"
-          aria-label="New project"
+          aria-label="新建项目"
           onClick={() => setAddProjectOpen(true)}
         >
           <svg
@@ -258,7 +258,7 @@ function ProjectSidebarEmpty({ collapsed = false }: { collapsed?: boolean }) {
         </button>
       </div>
       <div className="project-sidebar__empty flex-1 text-[var(--color-text-tertiary)]">
-        No projects yet. Click + to add one.
+        尚无项目。点击 + 添加。
       </div>
       <div className="project-sidebar__footer">
         <div className="flex items-center justify-end gap-1 border-t border-[var(--color-border-subtle)] px-2 py-2">
@@ -567,7 +567,7 @@ function ProjectSidebarInner({
 
   const handleRemoveProject = async (project: ProjectInfo) => {
     const confirmed = window.confirm(
-      `Remove project ${project.name} from AO? This clears its AO sessions/history and removes it from the portfolio, but keeps the repository folder on disk.`,
+      `从 AO 中移除项目 ${project.name}？这将清除其 AO 会话/历史并将其从项目列表中移除，但磁盘上的仓库文件夹会保留。`,
     );
     if (!confirmed) return;
 
@@ -581,7 +581,7 @@ function ProjectSidebarInner({
         throw new Error(
           (body && typeof body === "object" && "error" in body && typeof body.error === "string"
             ? body.error
-            : null) ?? "Failed to remove project.",
+            : null) ?? "移除项目失败。",
         );
       }
 
@@ -599,7 +599,7 @@ function ProjectSidebarInner({
       }
       onMobileClose?.();
     } catch (error) {
-      window.alert(error instanceof Error ? error.message : "Failed to remove project.");
+      window.alert(error instanceof Error ? error.message : "移除项目失败。");
     } finally {
       setDeletingProjectId(null);
     }
@@ -677,11 +677,11 @@ function ProjectSidebarInner({
   return (
     <aside className="project-sidebar flex h-full flex-col">
       <div className="project-sidebar__compact-hdr">
-        <span className="project-sidebar__sect-label">Projects</span>
+        <span className="project-sidebar__sect-label">项目</span>
         <button
           type="button"
           className="project-sidebar__add-btn"
-          aria-label="New project"
+          aria-label="新建项目"
           onClick={() => setAddProjectOpen(true)}
         >
           <svg
@@ -703,14 +703,14 @@ function ProjectSidebarInner({
           role="status"
           className="mx-3 mb-2 flex items-center justify-between gap-2 rounded-md border border-[var(--color-border-strong)] bg-[var(--color-bg-primary)] px-2 py-1.5 text-[11px] text-[var(--color-text-tertiary)]"
         >
-          <span>Failed to refresh · showing cached sessions</span>
+          <span>刷新失败 · 显示缓存的会话</span>
           {onRetry ? (
             <button
               type="button"
               onClick={onRetry}
               className="font-medium text-[var(--color-link)] hover:underline"
             >
-              Retry
+              重试
             </button>
           ) : null}
         </div>
@@ -719,7 +719,7 @@ function ProjectSidebarInner({
       {/* Project tree */}
       <div className="project-sidebar__tree flex-1 overflow-y-auto overflow-x-hidden">
         {sessions === null ? (
-          <div className="space-y-1 px-3 py-3" aria-label="Loading projects">
+          <div className="space-y-1 px-3 py-3" aria-label="加载项目中">
             {Array.from({ length: 4 }, (_, i) => (
               <div key={i} className="flex items-center gap-2 py-1">
                 <div className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-[var(--color-border-strong)]" />
@@ -780,7 +780,7 @@ function ProjectSidebarInner({
                     </svg>
                     <span className="project-sidebar__proj-name">{project.name}</span>
                     <span className="project-sidebar__proj-badge project-sidebar__proj-badge--degraded">
-                      degraded
+                      已降级
                     </span>
                   </a>
                 ) : (
@@ -830,8 +830,8 @@ function ProjectSidebarInner({
                       onMobileClose?.();
                     }}
                     className="project-sidebar__proj-action"
-                    aria-label={`Open ${project.name} dashboard`}
-                    title="Dashboard"
+                    aria-label={`打开 ${project.name} 仪表盘`}
+                    title="仪表盘"
                   >
                     <svg
                       width="12"
@@ -854,8 +854,8 @@ function ProjectSidebarInner({
                       onMobileClose?.();
                     }}
                     className="project-sidebar__proj-action"
-                    aria-label={`Open ${project.name} reviews`}
-                    title="Reviews"
+                    aria-label={`打开 ${project.name} 审阅`}
+                    title="代码审阅"
                   >
                     <svg
                       width="12"
@@ -884,8 +884,8 @@ function ProjectSidebarInner({
                       );
                     }}
                     className="project-sidebar__proj-action"
-                    aria-label={`Open ${project.name} orchestrator`}
-                    title="Orchestrator"
+                    aria-label={`打开 ${project.name} 编排器`}
+                    title="编排器"
                   >
                     <svg
                       width="12"
@@ -917,10 +917,10 @@ function ProjectSidebarInner({
                       );
                     }}
                     className="project-sidebar__proj-action project-sidebar__proj-action--menu"
-                    aria-label={`Project actions for ${project.name}`}
+                    aria-label={`${project.name} 项目操作`}
                     aria-expanded={projectMenuOpenId === project.id}
                     aria-haspopup="menu"
-                    title="Project actions"
+                    title="项目操作"
                   >
                     <svg
                       width="12"
@@ -939,7 +939,7 @@ function ProjectSidebarInner({
                       ref={projectMenuPopoverRef}
                       className="project-sidebar__proj-menu-popover"
                       role="menu"
-                      aria-label={`${project.name} actions`}
+                      aria-label={`${project.name} 操作`}
                     >
                       {orchestratorLink ? (
                         <button
@@ -954,7 +954,7 @@ function ProjectSidebarInner({
                             );
                           }}
                         >
-                          Open orchestrator
+                          打开编排器
                         </button>
                       ) : null}
                       <button
@@ -966,7 +966,7 @@ function ProjectSidebarInner({
                           setProjectSettingsProjectId(project.id);
                         }}
                       >
-                        Project settings
+                        项目设置
                       </button>
                       <button
                         type="button"
@@ -975,7 +975,7 @@ function ProjectSidebarInner({
                         onClick={() => void handleRemoveProject(project)}
                         disabled={deletingProjectId === project.id}
                       >
-                        {deletingProjectId === project.id ? "Removing..." : "Remove project"}
+                        {deletingProjectId === project.id ? "移除中..." : "移除项目"}
                       </button>
                     </div>
                   ) : null}
@@ -983,14 +983,14 @@ function ProjectSidebarInner({
               </div>
 
               {isDegraded ? (
-                <div className="project-sidebar__degraded-note">Config needs repair</div>
+                <div className="project-sidebar__degraded-note">配置需要修复</div>
               ) : null}
 
               {/* Sessions */}
               {!isDegraded && isExpanded && (
                 <div className="project-sidebar__sessions">
                   {sessions === null ? (
-                    <div className="space-y-2 px-3 py-2" aria-label="Loading sessions">
+                    <div className="space-y-2 px-3 py-2" aria-label="加载会话中">
                       {Array.from({ length: 3 }, (_, index) => (
                         <div
                           key={`${project.id}-loading-${index}`}
@@ -1035,7 +1035,7 @@ function ProjectSidebarInner({
                               onFocus={(e) => e.currentTarget.select()}
                               onBlur={() => void submitRename(session.id)}
                               maxLength={80}
-                              aria-label={`Rename ${session.id}`}
+                              aria-label={`重命名 ${session.id}`}
                               className="project-sidebar__sess-rename-input"
                             />
                           </div>
@@ -1056,18 +1056,18 @@ function ProjectSidebarInner({
                     })
                   ) : error ? (
                     <div className="px-3 py-2">
-                      <div className="project-sidebar__empty">Failed to load sessions</div>
+                      <div className="project-sidebar__empty">加载会话失败</div>
                       <button
                         type="button"
                         className="mt-2 text-xs font-medium text-[var(--color-link)] hover:underline"
                         onClick={onRetry}
                       >
-                        Retry
+                        重试
                       </button>
                     </div>
                   ) : (
                     <div className="project-sidebar__empty">
-                      No active sessions
+                      无活跃会话
                     </div>
                   )}
                 </div>
@@ -1087,8 +1087,8 @@ function ProjectSidebarInner({
               showKilled && "project-sidebar__footer-btn--active",
             )}
             aria-pressed={showKilled}
-            title={showKilled ? "Hide killed sessions" : "Show killed sessions"}
-            aria-label={showKilled ? "Hide killed sessions" : "Show killed sessions"}
+            title={showKilled ? "隐藏已终止会话" : "显示已终止会话"}
+            aria-label={showKilled ? "隐藏已终止会话" : "显示已终止会话"}
           >
             {/* skull / terminated icon */}
             <svg
@@ -1114,8 +1114,8 @@ function ProjectSidebarInner({
               showDone && "project-sidebar__footer-btn--active",
             )}
             aria-pressed={showDone}
-            title={showDone ? "Hide completed sessions" : "Show completed sessions"}
-            aria-label={showDone ? "Hide completed sessions" : "Show completed sessions"}
+            title={showDone ? "隐藏已完成会话" : "显示已完成会话"}
+            aria-label={showDone ? "隐藏已完成会话" : "显示已完成会话"}
           >
             {/* checkmark / done icon */}
             <svg
@@ -1142,8 +1142,8 @@ function ProjectSidebarInner({
               )}
               aria-expanded={settingsOpen}
               aria-haspopup="dialog"
-              title="Sidebar settings"
-              aria-label="Sidebar settings"
+              title="侧边栏设置"
+              aria-label="侧边栏设置"
             >
               <svg
                 width="13"
@@ -1163,7 +1163,7 @@ function ProjectSidebarInner({
                 ref={settingsPopoverRef}
                 className="project-sidebar__settings-popover"
                 role="dialog"
-                aria-label="Sidebar settings"
+                aria-label="侧边栏设置"
               >
                 <label className="project-sidebar__settings-row">
                   <input

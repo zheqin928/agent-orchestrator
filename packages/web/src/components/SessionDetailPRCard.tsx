@@ -62,35 +62,35 @@ export function buildBlockerChips(
     chips.push({
       icon: "✗",
       variant: "fail",
-      text: failCount > 0 ? `${failCount} check${failCount !== 1 ? "s" : ""} failing` : "CI failing",
+      text: failCount > 0 ? `${failCount} 项检查失败` : "CI 失败",
       notified: ciNotified,
     });
   } else if (pr.ciStatus === CI_STATUS.PENDING) {
-    chips.push({ icon: "●", variant: "warn", text: "CI pending" });
+    chips.push({ icon: "●", variant: "warn", text: "CI 等待中" });
   }
 
   if (hasChangesRequested) {
     chips.push({
       icon: "✗",
       variant: "fail",
-      text: "Changes requested",
+      text: "请求修改",
       notified: reviewNotified,
     });
   } else if (!pr.mergeability.approved) {
-    chips.push({ icon: "○", variant: "muted", text: "Awaiting reviewer" });
+    chips.push({ icon: "○", variant: "muted", text: "等待审阅者" });
   }
 
   if (hasConflicts) {
     chips.push({
       icon: "✗",
       variant: "fail",
-      text: "Merge conflicts",
+      text: "合并冲突",
       notified: conflictNotified,
     });
   }
 
   if (pr.isDraft) {
-    chips.push({ icon: "○", variant: "muted", text: "Draft" });
+    chips.push({ icon: "○", variant: "muted", text: "草稿" });
   }
 
   return chips;
@@ -222,12 +222,12 @@ export function SessionDetailPRCard({
         ) : null}
         {fileCount > 0 ? (
           <span className="session-detail-pr-card__diff-label">
-            {fileCount} file{fileCount !== 1 ? "s" : ""}
+            {fileCount} 个文件
           </span>
         ) : null}
-        {pr.isDraft ? <span className="session-detail-pr-card__diff-label">Draft</span> : null}
+        {pr.isDraft ? <span className="session-detail-pr-card__diff-label">草稿</span> : null}
         {pr.state === "merged" ? (
-          <span className="session-detail-pr-card__diff-label">Merged</span>
+          <span className="session-detail-pr-card__diff-label">已合并</span>
         ) : null}
       </div>
 
@@ -235,7 +235,7 @@ export function SessionDetailPRCard({
         <div
           className="session-detail-pr-card__merge-actions"
           role="group"
-          aria-label="Resolve merge conflicts"
+          aria-label="解决合并冲突"
         >
           <a
             href={compareUrl}
@@ -243,15 +243,15 @@ export function SessionDetailPRCard({
             rel="noopener noreferrer"
             className="session-detail-pr-merge-action"
           >
-            Compare with base branch
+            与基础分支对比
           </a>
           <button
             type="button"
             onClick={handleCopyBranch}
-            aria-label={branchCopied ? "Head branch name copied" : "Copy head branch name"}
+            aria-label={branchCopied ? "已复制头部分支名称" : "复制头部分支名称"}
             className="session-detail-pr-merge-action session-detail-pr-merge-action--btn"
           >
-            {branchCopied ? "Copied branch name" : "Copy head branch name"}
+            {branchCopied ? "已复制分支名称" : "复制头部分支名称"}
           </button>
         </div>
       ) : null}
@@ -269,7 +269,7 @@ export function SessionDetailPRCard({
             >
               <path d="M20 6L9 17l-5-5" />
             </svg>
-            Ready to merge
+            可合并
           </div>
         ) : (
           blockerIssues.map((issue) => (
@@ -284,7 +284,7 @@ export function SessionDetailPRCard({
             >
               {issue.icon} {issue.text}
               {issue.notified ? (
-                <span className="session-detail-blocker-chip__note">· notified</span>
+                <span className="session-detail-blocker-chip__note">· 已通知</span>
               ) : null}
             </span>
           ))

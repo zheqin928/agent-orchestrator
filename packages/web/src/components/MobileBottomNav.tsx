@@ -32,7 +32,7 @@ export function MobileBottomNav({
         <svg fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M3 13h8V3H3zm10 8h8V11h-8zM3 21h8v-6H3zm10-10h8V3h-8z" />
         </svg>
-        <span>Dashboard</span>
+        <span>仪表盘</span>
       </Link>
       <Link
         href={prsHref}
@@ -57,7 +57,7 @@ export function MobileBottomNav({
               <path d="M9 3H5a2 2 0 0 0-2 2v4m16 0V5a2 2 0 0 0-2-2h-4m0 18h4a2 2 0 0 0 2-2v-4M3 15v4a2 2 0 0 0 2 2h4" />
               <path d="M9 9h6v6H9z" />
             </svg>
-            <span>Orchestrator</span>
+            <span>编排器</span>
           </Link>
         ) : (
           <button type="button" className="mobile-bottom-nav__item" disabled>
@@ -65,7 +65,7 @@ export function MobileBottomNav({
               <path d="M9 3H5a2 2 0 0 0-2 2v4m16 0V5a2 2 0 0 0-2-2h-4m0 18h4a2 2 0 0 0 2-2v-4M3 15v4a2 2 0 0 0 2 2h4" />
               <path d="M9 9h6v6H9z" />
             </svg>
-            <span>Orchestrator</span>
+            <span>编排器</span>
           </button>
         )
       ) : null}

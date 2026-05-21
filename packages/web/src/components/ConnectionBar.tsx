@@ -16,7 +16,7 @@ export function ConnectionBar({ status }: ConnectionBarProps) {
         aria-atomic="true"
         onClick={() => window.location.reload()}
       >
-        Offline · tap to retry
+        已离线 · 点击重试
       </button>
     );
   }
@@ -28,7 +28,7 @@ export function ConnectionBar({ status }: ConnectionBarProps) {
       aria-live="polite"
       aria-atomic="true"
     >
-      Reconnecting…
+      重连中…
     </div>
   );
 }

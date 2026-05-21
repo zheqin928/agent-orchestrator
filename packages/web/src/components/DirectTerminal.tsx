@@ -113,8 +113,8 @@ export function DirectTerminal({
             type="button"
             onClick={scrollToLatest}
             className="absolute bottom-3 right-3 z-20 flex h-8 w-8 items-center justify-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-bg-elevated)] text-[var(--color-text-primary)] shadow-md active:scale-95"
-            aria-label="Jump to latest"
-            title="Jump to latest"
+            aria-label="跳转到最新"
+            title="跳转到最新"
           >
             <svg
               className="h-4 w-4"

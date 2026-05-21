@@ -68,7 +68,7 @@ export function TerminalControls({
         throw new Error(`Failed to send reload command: ${sendRes.status}`);
       }
     } catch (err) {
-      setReloadError(err instanceof Error ? err.message : "Failed to reload OpenCode session");
+      setReloadError(err instanceof Error ? err.message : "重新加载 OpenCode 会话失败");
     } finally {
       setReloading(false);
     }
@@ -86,12 +86,12 @@ export function TerminalControls({
 
   const statusText =
     displayStatus === "connected"
-      ? "Connected"
+      ? "已连接"
       : displayStatus === "error"
-        ? (error ?? "Error")
+        ? (error ?? "错误")
         : displayStatus === "disconnected"
-          ? "Disconnected"
-          : "Connecting…";
+          ? "已断开"
+          : "连接中…";
 
   const statusTextColor =
     displayStatus === "connected"
@@ -108,7 +108,7 @@ export function TerminalControls({
         onClick={() => setFontSize((prev) => Math.max(FONT_SIZE_MIN, prev - 1))}
         disabled={fontSize <= FONT_SIZE_MIN}
         className="w-5 h-5 text-xs flex items-center justify-center rounded hover:bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-        aria-label="Decrease font size"
+        aria-label="减小字号"
       >
         −
       </button>
@@ -119,7 +119,7 @@ export function TerminalControls({
         onClick={() => setFontSize((prev) => Math.min(FONT_SIZE_MAX, prev + 1))}
         disabled={fontSize >= FONT_SIZE_MAX}
         className="w-5 h-5 text-xs flex items-center justify-center rounded hover:bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-        aria-label="Increase font size"
+        aria-label="增大字号"
       >
         +
       </button>
@@ -130,8 +130,8 @@ export function TerminalControls({
     <button
       onClick={handleReload}
       disabled={reloading || muxStatus !== "connected"}
-      title="Restart OpenCode session (/exit then resume mapped session)"
-      aria-label="Restart OpenCode session"
+      title="重启 OpenCode 会话（/exit 后恢复映射会话）"
+      aria-label="重启 OpenCode 会话"
       className="flex items-center gap-1 px-2 py-0.5 text-[11px] text-[var(--color-text-tertiary)] transition-colors hover:bg-[var(--color-bg-subtle)] hover:text-[var(--color-text-primary)] disabled:cursor-not-allowed disabled:opacity-70"
     >
       {reloading ? (
@@ -145,7 +145,7 @@ export function TerminalControls({
           >
             <path d="M12 3a9 9 0 109 9" />
           </svg>
-          restarting
+          重启中
         </>
       ) : (
         <>
@@ -159,7 +159,7 @@ export function TerminalControls({
             <path d="M21 12a9 9 0 11-2.64-6.36" />
             <path d="M21 3v6h-6" />
           </svg>
-          restart
+          重启
         </>
       )}
     </button>
@@ -172,7 +172,7 @@ export function TerminalControls({
         "flex items-center gap-1 px-2 py-0.5 text-[11px] text-[var(--color-text-tertiary)] transition-colors hover:bg-[var(--color-bg-subtle)] hover:text-[var(--color-text-primary)]",
         !isOpenCodeSession && !chromeless && "ml-auto",
       )}
-      aria-label={fullscreen ? "exit fullscreen" : "fullscreen"}
+      aria-label={fullscreen ? "退出全屏" : "全屏"}
     >
       {fullscreen ? (
         <>
@@ -185,7 +185,7 @@ export function TerminalControls({
           >
             <path d="M8 3v3a2 2 0 01-2 2H3m18 0h-3a2 2 0 01-2-2V3m0 18v-3a2 2 0 012-2h3M3 16h3a2 2 0 012 2v3" />
           </svg>
-          exit fullscreen
+          退出全屏
         </>
       ) : (
         <>
@@ -198,7 +198,7 @@ export function TerminalControls({
           >
             <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3" />
           </svg>
-          fullscreen
+          全屏
         </>
       )}
     </button>
@@ -216,7 +216,7 @@ export function TerminalControls({
   return (
     <div className="terminal-chrome-bar flex items-center gap-2 border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-elevated)] px-3 py-2">
       {/* Pane label — matches the workspace pane-header style used elsewhere */}
-      <span className="terminal-chrome-pane-label">TERMINAL</span>
+      <span className="terminal-chrome-pane-label">终端</span>
       {/* Identity group: session name on top, status below on mobile */}
       <div className="terminal-chrome-identity">
         <span className="terminal-chrome-session-id font-[var(--font-mono)] text-[11px]" style={{ color: accentColor }}>

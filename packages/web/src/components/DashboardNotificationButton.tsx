@@ -17,10 +17,10 @@ type NotificationView = "all" | "unread";
 
 function formatRelativeTime(isoDate: string): string {
   const timestamp = new Date(isoDate).getTime();
-  if (!Number.isFinite(timestamp)) return "now";
+  if (!Number.isFinite(timestamp)) return "刚刚";
 
   const diffMs = Date.now() - timestamp;
-  if (diffMs < 60_000) return "now";
+  if (diffMs < 60_000) return "刚刚";
 
   const minutes = Math.floor(diffMs / 60_000);
   if (minutes < 60) return `${minutes}m`;
@@ -160,7 +160,7 @@ function successNotificationLabel(notification: DashboardNotificationRecord): st
 
   const semanticType = stringField(data, "semanticType");
   if (semanticType && normalizeEventText(semanticType) === "summary.all-complete") {
-    return "all complete";
+    return "全部完成";
   }
 
   const merge = recordField(data, "merge");
@@ -174,7 +174,7 @@ function successNotificationLabel(notification: DashboardNotificationRecord): st
     mergeReady === true ||
     reviewDecision === "approved"
   ) {
-    return "approved";
+    return "已批准";
   }
 
   return null;
@@ -256,7 +256,7 @@ function NotificationItem({
           {escalationCause ? <span>{escalationCause.replace(/_/g, " ")}</span> : null}
         </div>
         <div className="dashboard-notification-item__links">
-          <Link href={sessionHref}>Session</Link>
+          <Link href={sessionHref}>会话</Link>
           {prUrl ? (
             <a href={prUrl} target="_blank" rel="noopener noreferrer">
               PR
@@ -264,7 +264,7 @@ function NotificationItem({
           ) : null}
           {reviewUrl ? (
             <a href={reviewUrl} target="_blank" rel="noopener noreferrer">
-              Review
+              审阅
             </a>
           ) : null}
           {urlActions.map((action) => (
@@ -285,7 +285,7 @@ function NotificationItem({
           className="dashboard-notification-item__read-btn"
           onClick={isRead ? onMarkUnread : onMarkRead}
         >
-          {isRead ? "Mark unread" : "Mark read"}
+          {isRead ? "标记为未读" : "标记为已读"}
         </button>
       </div>
     </li>
@@ -401,7 +401,7 @@ export function DashboardNotificationButton() {
       <button
         type="button"
         className={`dashboard-app-btn dashboard-notification-btn${open ? " dashboard-notification-btn--open" : ""}`}
-        aria-label="Notifications"
+        aria-label="通知"
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
       >
@@ -423,9 +423,9 @@ export function DashboardNotificationButton() {
       </button>
 
       {open ? (
-        <div className="dashboard-notification-panel" role="dialog" aria-label="Notifications">
+        <div className="dashboard-notification-panel" role="dialog" aria-label="通知">
           <div className="dashboard-notification-panel__header">
-            <div className="dashboard-notification-panel__title">Notifications</div>
+            <div className="dashboard-notification-panel__title">通知</div>
             <div className="dashboard-notification-panel__actions">
               <button
                 type="button"
@@ -433,14 +433,14 @@ export function DashboardNotificationButton() {
                 disabled={notifications.length === 0}
                 onClick={allRead ? markAllUnread : markAllRead}
               >
-                {allRead ? "Mark all unread" : "Mark all read"}
+                {allRead ? "全部标记为未读" : "全部标记为已读"}
               </button>
             </div>
           </div>
           <div
             className="dashboard-notification-tabs"
             role="tablist"
-            aria-label="Notification view"
+            aria-label="通知视图"
           >
             <button
               type="button"
@@ -449,7 +449,7 @@ export function DashboardNotificationButton() {
               className="dashboard-notification-tab"
               onClick={() => setView("all")}
             >
-              All
+              全部
             </button>
             <button
               type="button"
@@ -458,7 +458,7 @@ export function DashboardNotificationButton() {
               className="dashboard-notification-tab"
               onClick={() => setView("unread")}
             >
-              Unread <span>{unreadCount}</span>
+              未读 <span>{unreadCount}</span>
             </button>
           </div>
           {error ? <div className="dashboard-notification-panel__error">{error}</div> : null}
@@ -476,7 +476,7 @@ export function DashboardNotificationButton() {
             </ul>
           ) : (
             <div className="dashboard-notification-panel__empty">
-              {view === "unread" ? "No unread notifications" : "No notifications yet"}
+              {view === "unread" ? "暂无未读通知" : "暂无通知"}
             </div>
           )}
         </div>
